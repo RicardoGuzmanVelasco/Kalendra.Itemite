@@ -58,5 +58,49 @@ namespace Kalendra.Itemite.Tests
 
             sut.RelateWith(doc).Should().BePositive();
         }
+
+        [Test]
+        public void Item_CannotChain_WithItself()
+        {
+            var sut = new Item("A", new[] { "1, 2, 3" });
+            
+            Action act = () => sut.ChainWith(sut);
+
+            act.Should().Throw<ArgumentException>();
+        }
+
+        [Test]
+        public void SimmilarItems_CannotChain()
+        {
+            var sut1 = new Item("A", new[] { "1" });
+            var sut2 = new Item("A", new[] { "1" });
+
+            Action act = () => sut1.ChainWith(sut2);
+
+            act.Should().Throw<ArgumentException>();
+        }
+
+        [Test]
+        public void Chain_AddsBothItems()
+        {
+            var doc = new Item("Doc", new[] { "1" });
+            var sut = new Item("Sut", new[] { "2" });
+
+            var result = sut.ChainWith(doc);
+            
+            result.Should().BeEquivalentTo(new Item.Chain(sut, doc));
+        }
+
+        [Test]
+        public void Chain_ThroughFluentAPI()
+        {
+            var doc1 = new Item("Doc1", new[] { "1a" });
+            var doc2 = new Item("Doc2", new[] { "1b" });
+            var sut = new Item("Sut", new[] { "2" });
+
+            var result = sut.ChainWith(doc1).ChainWith(doc2);
+            
+            result.Should().BeEquivalentTo(new Item.Chain(sut, doc1, doc2));
+        }
     }
 }
