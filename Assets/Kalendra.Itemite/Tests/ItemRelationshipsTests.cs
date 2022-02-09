@@ -3,11 +3,21 @@ using System.Linq;
 using FluentAssertions;
 using Kalendra.Itemite.Runtime.Domain;
 using NUnit.Framework;
+using UnityEngine;
 
 namespace Kalendra.Itemite.Tests
 {
     public class ItemRelationshipsTests
     {
+        #region Fixture
+        static Item Tree => new Item("Tree", new[] { "Plant", "Vegetable", "Natural", "Raw materal", "Wooden" });
+        static Item Fire => new Item("Fire", new[] { "Natural", "Flammable" });
+        static Item Apple => new Item("Apple", new[] { "Natural", "Fruit", "Vegetable", "Food" });
+        static Item Paper => new Item("Paper", new[] { "Raw material", "Flammable", "Wooden" });
+        static Item Car => new Item("Car", new[] { "Vehicle", "Transport", "Invention", "Tech" });
+        #endregion
+        
+        #region Creation
         [Test]
         public void Item_Creation()
         {
@@ -40,7 +50,9 @@ namespace Kalendra.Itemite.Tests
 
             sut.Tags.Should().HaveCount(1);
         }
+        #endregion
 
+        #region Items relationship
         [Test]
         public void Relating_ItemsWithSomeCommonTag_IsNotZero()
         {
@@ -58,7 +70,9 @@ namespace Kalendra.Itemite.Tests
 
             sut.RelateWith(doc).Should().BePositive();
         }
+        #endregion
 
+        #region Chaining
         [Test]
         public void Item_CannotChain_WithItself()
         {
@@ -88,7 +102,7 @@ namespace Kalendra.Itemite.Tests
 
             var result = sut.ChainWith(doc);
             
-            result.Should().BeEquivalentTo(new Item.Chain(sut, doc));
+            result.Should().BeEquivalentTo(new Chain(sut, doc));
         }
 
         [Test]
@@ -100,7 +114,41 @@ namespace Kalendra.Itemite.Tests
 
             var result = sut.ChainWith(doc1).ChainWith(doc2);
             
-            result.Should().BeEquivalentTo(new Item.Chain(sut, doc1, doc2));
+            result.Should().BeEquivalentTo(new Chain(sut, doc1, doc2));
+        }
+
+        [Test]
+        public void ReduceChain_WithSomeCommonTags_IsNotZero()
+        {
+            var doc1 = new Item("1", new[] { "Same", "NotSame" });
+            var doc2 = new Item("2", new[] { "Same", "NoSame" });
+            var sut = new Chain(doc1, doc2);
+
+            var result = sut.Reduce();
+
+            result.Should().BePositive();
+        }
+        
+        [Test]
+        public void ReduceChain_WithoutCommonTags_IsZero()
+        {
+            var doc1 = new Item("1", new[] { "Tag1"});
+            var doc2 = new Item("2", new[] { "Tag2"});
+            var sut = new Chain(doc1, doc2);
+
+            var result = sut.Reduce();
+
+            result.Should().Be(0);
+        }
+        #endregion
+
+        [Test]
+        public void Chains_WithDifferentOrders_DiffersAlsoInFormat()
+        {
+            var sut1 = new Chain(Tree, Fire, Apple, Paper);
+            var sut2 = new Chain(Paper, Fire, Tree, Apple);
+            
+            sut1.ToString().Should().NotBe(sut2.ToString());
         }
     }
 }

@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace Kalendra.Itemite.Runtime.Domain
 {
-    public partial class Item : IChainable 
+    public class Item : IChainable 
     {
         public string Name { get; }
         public IEnumerable<string> Tags { get; }
@@ -24,12 +24,14 @@ namespace Kalendra.Itemite.Runtime.Domain
             var allTags = Tags.Union(other.Tags);
             var commonTags = Tags.Intersect(other.Tags);
             
-            return commonTags.Count()/(float)allTags.Count();
+            return 100f * commonTags.Count()/allTags.Count();
         }
 
         public Chain ChainWith(Item item)
         {
             return new Chain(this, item);
         }
+
+        public override string ToString() => Name;
     }
 }
