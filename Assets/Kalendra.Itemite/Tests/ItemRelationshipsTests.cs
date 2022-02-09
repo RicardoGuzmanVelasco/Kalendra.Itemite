@@ -3,7 +3,6 @@ using System.Linq;
 using FluentAssertions;
 using Kalendra.Itemite.Runtime.Domain;
 using NUnit.Framework;
-using UnityEngine;
 
 namespace Kalendra.Itemite.Tests
 {
@@ -16,12 +15,12 @@ namespace Kalendra.Itemite.Tests
         static Item Paper => new Item("Paper", new[] { "Raw material", "Flammable", "Wooden" });
         static Item Car => new Item("Car", new[] { "Vehicle", "Transport", "Invention", "Tech" });
         #endregion
-        
+
         #region Creation
         [Test]
         public void Item_Creation()
         {
-            var sut = new Item("Tree", new[]{ "Plant", "Natural" });
+            var sut = new Item("Tree", new[] { "Plant", "Natural" });
 
             sut.Name.Should().Be("Tree");
             sut.Tags.Should().BeEquivalentTo("Plant", "Natural");
@@ -34,7 +33,7 @@ namespace Kalendra.Itemite.Tests
 
             act.Should().Throw<ArgumentException>();
         }
-        
+
         [Test]
         public void Item_CannotHave_NullTags()
         {
@@ -56,8 +55,8 @@ namespace Kalendra.Itemite.Tests
         [Test]
         public void Relating_ItemsWithSomeCommonTag_IsNotZero()
         {
-            var doc = new Item("Home", new[]{ "Shelter, Human" });
-            var sut = new Item("Tree", new[]{ "Plant", "Natural" });
+            var doc = new Item("Home", new[] { "Shelter, Human" });
+            var sut = new Item("Tree", new[] { "Plant", "Natural" });
 
             sut.RelateWith(doc).Should().BeApproximately(0, float.Epsilon);
         }
@@ -65,8 +64,8 @@ namespace Kalendra.Itemite.Tests
         [Test]
         public void Relating_DisjointItems_IsAroundZero()
         {
-            var doc = new Item("Fire", new[]{ "Natural" });
-            var sut = new Item("Tree", new[]{ "Plant", "Natural" });
+            var doc = new Item("Fire", new[] { "Natural" });
+            var sut = new Item("Tree", new[] { "Plant", "Natural" });
 
             sut.RelateWith(doc).Should().BePositive();
         }
@@ -74,8 +73,8 @@ namespace Kalendra.Itemite.Tests
         [Test]
         public void ItemsEquality_IsTagsOrderIndependent()
         {
-            var sut1 = new Item("", new[]{ "1", "2" });
-            var sut2 = new Item("", new[]{ "2", "1" });
+            var sut1 = new Item("", new[] { "1", "2" });
+            var sut2 = new Item("", new[] { "2", "1" });
 
             sut1.Should().BeEquivalentTo(sut2);
         }
@@ -86,7 +85,7 @@ namespace Kalendra.Itemite.Tests
         public void Item_CannotChain_WithItself()
         {
             var sut = new Item("A", new[] { "1, 2, 3" });
-            
+
             Action act = () => sut.ChainWith(sut);
 
             act.Should().Throw<ArgumentException>();
@@ -110,7 +109,7 @@ namespace Kalendra.Itemite.Tests
             var sut = new Item("Sut", new[] { "2" });
 
             var result = sut.ChainWith(doc);
-            
+
             result.Should().BeEquivalentTo(new Chain(sut, doc));
         }
 
@@ -122,7 +121,7 @@ namespace Kalendra.Itemite.Tests
             var sut = new Item("Sut", new[] { "2" });
 
             var result = sut.ChainWith(doc1).ChainWith(doc2);
-            
+
             result.Should().BeEquivalentTo(new Chain(sut, doc1, doc2));
         }
 
@@ -137,19 +136,18 @@ namespace Kalendra.Itemite.Tests
 
             result.Should().BePositive();
         }
-        
+
         [Test]
         public void ReduceChain_WithoutCommonTags_IsZero()
         {
-            var doc1 = new Item("1", new[] { "Tag1"});
-            var doc2 = new Item("2", new[] { "Tag2"});
+            var doc1 = new Item("1", new[] { "Tag1" });
+            var doc2 = new Item("2", new[] { "Tag2" });
             var sut = new Chain(doc1, doc2);
 
             var result = sut.Reduce();
 
             result.Should().Be(0);
         }
-        #endregion
 
         [Test]
         public void Chains_WithDifferentOrders_DiffersAlsoInFormat()
@@ -159,5 +157,6 @@ namespace Kalendra.Itemite.Tests
 
             sut1.ToString().Should().NotBe(sut2.ToString());
         }
+        #endregion
     }
 }
