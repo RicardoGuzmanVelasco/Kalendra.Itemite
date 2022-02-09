@@ -148,6 +148,9 @@ namespace Kalendra.Itemite.Tests
             var sut1 = new Chain(Tree, Fire, Apple, Paper);
             var sut2 = new Chain(Paper, Fire, Tree, Apple);
             
+            Debug.Log(sut1);
+            Debug.Log(sut2);
+            
             sut1.ToString().Should().NotBe(sut2.ToString());
         }
     }

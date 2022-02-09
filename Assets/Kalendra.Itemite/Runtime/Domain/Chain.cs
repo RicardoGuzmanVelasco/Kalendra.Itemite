@@ -63,7 +63,7 @@ namespace Kalendra.Itemite.Runtime.Domain
                     return string.Empty;
 
                 var relation = items[i].RelateWith(items[i + 1]);
-                return $" -[{relation:0.}]-> ";
+                return $" -{relation:0.}-> ";
             }
 
             void FormatReductionAsHeader()
