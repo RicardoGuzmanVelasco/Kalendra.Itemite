@@ -70,6 +70,15 @@ namespace Kalendra.Itemite.Tests
 
             sut.RelateWith(doc).Should().BePositive();
         }
+
+        [Test]
+        public void ItemsEquality_IsTagsOrderIndependent()
+        {
+            var sut1 = new Item("", new[]{ "1", "2" });
+            var sut2 = new Item("", new[]{ "2", "1" });
+
+            sut1.Should().BeEquivalentTo(sut2);
+        }
         #endregion
 
         #region Chaining
@@ -147,10 +156,7 @@ namespace Kalendra.Itemite.Tests
         {
             var sut1 = new Chain(Tree, Fire, Apple, Paper);
             var sut2 = new Chain(Paper, Fire, Tree, Apple);
-            
-            Debug.Log(sut1);
-            Debug.Log(sut2);
-            
+
             sut1.ToString().Should().NotBe(sut2.ToString());
         }
     }

@@ -5,10 +5,10 @@ using JetBrains.Annotations;
 
 namespace Kalendra.Itemite.Runtime.Domain
 {
-    public class Item : IChainable 
+    public sealed class Item : IChainable 
     {
         public string Name { get; }
-        public IEnumerable<string> Tags { get; }
+        public HashSet<string> Tags { get; }
 
         public Item(string name, [NotNull] IEnumerable<string> tags)
         {
@@ -19,6 +19,7 @@ namespace Kalendra.Itemite.Runtime.Domain
             Tags = new HashSet<string>(tags);
         }
 
+        #region Public API
         public float RelateWith(Item other)
         {
             var allTags = Tags.Union(other.Tags);
@@ -31,7 +32,30 @@ namespace Kalendra.Itemite.Runtime.Domain
         {
             return new Chain(this, item);
         }
+        #endregion
+        
+        #region Equality
+        bool Equals(Item other)
+        {
+            return Name == other.Name &&
+                   Tags.Count == other.Tags.Count &&
+                   Tags.All(other.Tags.Contains);
+        }
 
+        public override bool Equals(object obj)
+        {
+            if(ReferenceEquals(null, obj)) return false;
+            if(ReferenceEquals(this, obj)) return true;
+            if(obj.GetType() != this.GetType()) return false;
+            return Equals((Item)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name, Tags);
+        }
+        #endregion
+        
         public override string ToString() => Name;
     }
 }

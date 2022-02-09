@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Kalendra.Itemite.Runtime.Domain
 {
-    public class Chain : IChainable
+    public sealed class Chain : IChainable
     {
         readonly List<Item> items = new List<Item>();
 
@@ -18,18 +18,11 @@ namespace Kalendra.Itemite.Runtime.Domain
                 Add(item);
         }
 
+        #region Public API
         public Chain ChainWith(Item item)
         {
             Add(item);
             return this;
-        }
-
-        void Add(Item item)
-        {
-            if(items.Contains(item))
-                throw new ArgumentException($"{item} is already chained");
-                
-            items.Add(item);
         }
 
         public float Reduce()
@@ -41,7 +34,41 @@ namespace Kalendra.Itemite.Runtime.Domain
             
             return result;
         }
+        #endregion
 
+        #region SupportMethods
+        void Add(Item item)
+        {
+            if(items.Contains(item))
+                throw new ArgumentException($"{item} is already chained");
+                
+            items.Add(item);
+        }
+        #endregion
+
+        #region Equality
+        bool Equals(Chain other)
+        {
+            if(items.Count != other.items.Count)
+                return false;
+
+            return !items.Where((item, i) => !item.Equals(other.items[i])).Any();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if(ReferenceEquals(null, obj)) return false;
+            if(ReferenceEquals(this, obj)) return true;
+            if(obj.GetType() != this.GetType()) return false;
+            return Equals((Chain)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (items != null ? items.GetHashCode() : 0);
+        }
+        #endregion
+        
         public override string ToString()
         {
             var result = new StringBuilder();
