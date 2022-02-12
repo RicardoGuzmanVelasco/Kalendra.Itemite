@@ -5,9 +5,14 @@ namespace Kalendra.Itemite.Runtime.Domain
 {
     public static class Permutation
     {
-        public static IEnumerable<IEnumerable<T>> Of<T>(IList<T> strings)
+        public static IEnumerable<IEnumerable<T>> Of<T>(IEnumerable<T> source)
         {
-            return Permute(strings.Count).Select(p => p.Select(i => strings[i]));
+            return Of(source.ToList());
+        }
+
+        public static IEnumerable<IEnumerable<T>> Of<T>(IList<T> source)
+        {
+            return Permute(source.Count).Select(p => p.Select(i => source[i]));
         }
 
         #region Indexing
