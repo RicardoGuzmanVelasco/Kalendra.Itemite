@@ -1,21 +1,65 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace Kalendra.Itemite.Runtime.Domain
 {
-    public sealed class Chain : IChainable
+    public sealed class Chain : IChainable, IReadOnlyList<Item>
     {
         readonly List<Item> items = new List<Item>();
 
         public Chain(IEnumerable<Item> startingOrderedItems)
-            : this(startingOrderedItems.ToArray()) { }
-            
+            : this(startingOrderedItems.ToArray())
+        {
+        }
+
         public Chain(params Item[] startingOrderedItems)
         {
             foreach(var item in startingOrderedItems)
                 Add(item);
+        }
+
+        #region SupportMethods
+        void Add(Item item)
+        {
+            if(items.Contains(item))
+                throw new ArgumentException($"{item} is already chained");
+
+            items.Add(item);
+        }
+        #endregion
+
+        public override string ToString()
+        {
+            var result = new StringBuilder();
+
+            FormatReductionAsHeader();
+            FormatRelationsAsBody();
+
+            return result.ToString();
+
+
+            void FormatRelationsAsBody()
+            {
+                for(var i = 0; i < items.Count; i++)
+                    result.Append(items[i]).Append(FormatRelationAt(i));
+            }
+
+            string FormatRelationAt(int i)
+            {
+                if(items[i] == items.Last())
+                    return string.Empty;
+
+                var relation = items[i].RelateWith(items[i + 1]);
+                return $" -{relation:0.}-> ";
+            }
+
+            void FormatReductionAsHeader()
+            {
+                result.Append($"[{Reduce():0.##}] | ");
+            }
         }
 
         #region Public API
@@ -31,18 +75,8 @@ namespace Kalendra.Itemite.Runtime.Domain
 
             for(var i = 0; i < items.Count - 1; i++)
                 result += items[i].RelateWith(items[i + 1]);
-            
-            return result;
-        }
-        #endregion
 
-        #region SupportMethods
-        void Add(Item item)
-        {
-            if(items.Contains(item))
-                throw new ArgumentException($"{item} is already chained");
-                
-            items.Add(item);
+            return result;
         }
         #endregion
 
@@ -68,35 +102,21 @@ namespace Kalendra.Itemite.Runtime.Domain
             return (items != null ? items.GetHashCode() : 0);
         }
         #endregion
-        
-        public override string ToString()
+
+        #region IReadOnlyList implementation
+        public Item this[int index] => items[index];
+
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            var result = new StringBuilder();
-
-            FormatReductionAsHeader();
-            FormatRelationsAsBody();
-
-            return result.ToString();
-            
-            
-            void FormatRelationsAsBody()
-            {
-                for(var i = 0; i < items.Count; i++)
-                    result.Append(items[i]).Append(FormatRelationAt(i));
-            }
-            string FormatRelationAt(int i)
-            {
-                if(items[i] == items.Last())
-                    return string.Empty;
-
-                var relation = items[i].RelateWith(items[i + 1]);
-                return $" -{relation:0.}-> ";
-            }
-
-            void FormatReductionAsHeader()
-            {
-                result.Append($"[{Reduce():0.##}] | ");
-            }
+            return GetEnumerator();
         }
+
+        public IEnumerator<Item> GetEnumerator()
+        {
+            return items.GetEnumerator();
+        }
+
+        public int Count => items.Count;
+        #endregion
     }
 }
