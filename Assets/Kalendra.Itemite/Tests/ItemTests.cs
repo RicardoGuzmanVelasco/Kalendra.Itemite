@@ -32,7 +32,7 @@ namespace Kalendra.Itemite.Tests
             string nullTags = null;
             Action act = () => new Item("Empty", nullTags);
 
-            act.Should().Throw<ArgumentException>();
+            act.Should().Throw<NullReferenceException>();
         }
 
         [Test]
