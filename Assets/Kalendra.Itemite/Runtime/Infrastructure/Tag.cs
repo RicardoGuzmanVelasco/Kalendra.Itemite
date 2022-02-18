@@ -7,7 +7,7 @@ namespace Kalendra.Itemite.Runtime.Infrastructure
     {
         public string Id => name;
 
-        protected bool Equals(Tag other)
+        bool Equals(Tag other)
         {
             return Id == other.Id;
         }

@@ -8,14 +8,14 @@ namespace Kalendra.Itemite.Runtime.Infrastructure
     {
         [SerializeField] Tag[] tags;
 
-        string Id => name;
+        public string Id => name;
 
         public Domain.Item ToDomain()
         {
             return new Domain.Item(Id, tags.Select(t => t.Id).ToList());
         }
 
-        protected bool Equals(Item other)
+        bool Equals(Item other)
         {
             return Id == other.Id;
         }
@@ -31,6 +31,11 @@ namespace Kalendra.Itemite.Runtime.Infrastructure
         public override int GetHashCode()
         {
             return Id.GetHashCode();
+        }
+
+        public static implicit operator Domain.Item(Item item)
+        {
+            return item.ToDomain();
         }
     }
 }
