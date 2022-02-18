@@ -1,0 +1,16 @@
+{
+  "name": "Kalendra.Itemite.Infrastructure",
+  "rootNamespace": "",
+  "references": [
+    "GUID:da2766eda30e4643a06bfea63c2ee1d9"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}
