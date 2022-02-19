@@ -7,6 +7,7 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Persistence
     public sealed class Item : ScriptableObject
     {
         [SerializeField] Tag[] tags;
+        [SerializeField] Sprite icon;
 
         public string Id => name;
 

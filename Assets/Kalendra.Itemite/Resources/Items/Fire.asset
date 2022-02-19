@@ -15,3 +15,4 @@ MonoBehaviour:
   tags:
   - {fileID: 11400000, guid: e4eb82ec98f675445b3f5666250c48ab, type: 2}
   - {fileID: 11400000, guid: 565ffd2c13c46b74dbfab9f4013722ca, type: 2}
+  icon: {fileID: 21300000, guid: 4d997e1f25e8d464da2442934660c148, type: 3}
