@@ -4,7 +4,9 @@ using UnityEngine;
 
 namespace Kalendra.Itemite.Runtime.Infrastructure
 {
-    public class ItemsListener : MonoBehaviour
+    public interface IItemsListener { }
+
+    public class ItemsListener : MonoBehaviour, IItemsListener
     {
         void Awake()
         {

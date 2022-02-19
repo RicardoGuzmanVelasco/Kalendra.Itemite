@@ -31,7 +31,7 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
 
         static void BorrowItem(Item itemToGive)
         {
-            itemToGive.gameObject.SetActive(true);
+            //At the time, we want not to active items before dispatch to clients.
         }
 
         static void RetrieveItem(Item itemToGive)

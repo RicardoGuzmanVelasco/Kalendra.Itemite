@@ -11,7 +11,7 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
 
         Domain.Item attachedItem;
 
-        public void OnMouseUpAsButton()
+        void OnMouseUp()
         {
             if(attachedItem is null)
                 return;
@@ -20,6 +20,7 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
         }
 
         public event Action<Domain.Item> Clicked = _ => { };
+
 
         public void Inject(Domain.Item item)
         {

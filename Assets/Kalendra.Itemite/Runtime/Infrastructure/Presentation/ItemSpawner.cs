@@ -18,6 +18,7 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
         void Awake()
         {
             pool = GetComponent<ItemPool>();
+            ItemSpawned += SetupItem;
         }
 
         void Start()
@@ -26,6 +27,15 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
         }
 
         public event Action<Item> ItemSpawned = _ => { };
+
+
+        void SetupItem(Item item)
+        {
+            visibleItems.Add(item);
+
+            item.gameObject.SetActive(true);
+            item.transform.Translate(EmptyLocation());
+        }
 
         void SpawnItems(int count)
         {
@@ -38,18 +48,10 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
                 var index = i < randomItems.Count ? i : Random.Range(0, randomItems.Count);
 
                 var spawn = pool.Get();
-                visibleItems.Add(spawn);
-
                 spawn.Inject(randomItems[index]);
-                RandomizePlacing(spawn.transform);
 
                 ItemSpawned.Invoke(spawn);
             }
-        }
-
-        void RandomizePlacing(Transform item)
-        {
-            item.Translate(EmptyLocation());
         }
 
         Vector3 EmptyLocation()
