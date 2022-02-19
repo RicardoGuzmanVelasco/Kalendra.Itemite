@@ -1,7 +1,6 @@
 using System;
 using Kalendra.Itemite.Runtime.Domain.Application;
 using Kalendra.Itemite.Runtime.Infrastructure.Persistence;
-using TMPro;
 using UnityEngine;
 
 namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
@@ -12,15 +11,16 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
 
         readonly IVisualItemRepo repo = new ResourcesItemRepo();
         Domain.Item attachedItem;
+
         SpriteRenderer icon;
-        TextMeshPro[] labels;
+        ILabel label;
 
         bool selected;
 
         void Awake()
         {
-            labels = GetComponentsInChildren<TextMeshPro>();
             icon = GetComponentInChildren<SpriteRenderer>();
+            label = GetComponentInChildren<ILabel>();
         }
 
         void OnMouseUp()
@@ -37,7 +37,10 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
             set
             {
                 selected = value;
-                icon.color = icon.color.With(selected ? .75f : 1f);
+                label.Color = selected &&
+                              ColorUtility.TryParseHtmlString("#10FF4D", out var color)
+                    ? color
+                    : Color.white;
             }
         }
 
@@ -58,9 +61,7 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
         void DrawItem()
         {
             transform.name = attachedItem.Name;
-
-            foreach(var label in labels)
-                label.text = attachedItem.Name;
+            label.Text = attachedItem.Name;
 
             var foundIcon = repo.GetIconOf(attachedItem.Name);
             icon.sprite = foundIcon ? foundIcon : defaultUnknownIcon;
