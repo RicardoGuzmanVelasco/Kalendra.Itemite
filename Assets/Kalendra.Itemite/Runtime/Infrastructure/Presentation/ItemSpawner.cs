@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Kalendra.Itemite.Runtime.Domain.Application;
 using Kalendra.Itemite.Runtime.Infrastructure.Persistence;
 using UnityEngine;
@@ -9,9 +11,20 @@ using Random = UnityEngine.Random;
 
 namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
 {
+    public enum SpawnStepping
+    {
+        NoStepping,
+        ByAsyncAwait,
+        ByCoroutine
+    }
+
     public class ItemSpawner : MonoBehaviour
     {
+        [SerializeField] float stepSecondsPerSpawn = .5f;
+        [SerializeField] SpawnStepping steppingStrategy;
+
         readonly IItemRepo repo = new ResourcesItemRepo();
+
         readonly List<Item> visibleItems = new List<Item>();
         IObjectPool<Item> pool;
 
@@ -28,15 +41,46 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
 
         public event Action<Item> ItemSpawned = _ => { };
 
-
         void SetupItem(Item item)
         {
             visibleItems.Add(item);
 
-            item.gameObject.SetActive(true);
             item.transform.Translate(EmptyLocation());
+
+            ShowBySteppingStrategy(item.gameObject);
         }
 
+        async void ShowBySteppingStrategy(GameObject target)
+        {
+            switch(steppingStrategy)
+            {
+                case SpawnStepping.NoStepping:
+                    target.SetActive(true);
+                    break;
+                case SpawnStepping.ByAsyncAwait:
+                    await SteppedAsyncShow();
+                    break;
+                case SpawnStepping.ByCoroutine:
+                    StartCoroutine(SteppedCoroutineShow());
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            async Task SteppedAsyncShow()
+            {
+                await Task.Delay(CurrentPopulationDelay);
+                target.SetActive(true);
+            }
+
+            IEnumerator SteppedCoroutineShow()
+            {
+                yield return new WaitForSeconds((float)CurrentPopulationDelay.TotalSeconds);
+                target.SetActive(true);
+            }
+        }
+
+        #region Spawning in screen
         void SpawnItems(int count)
         {
             var randomItems = repo.GetRandom(count);
@@ -69,5 +113,8 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
             var occupiedLocations = visibleItems.Select(i => i.transform.position);
             return occupiedLocations.Any(occupied => Vector2.Distance(occupied, location) < 2f);
         }
+
+        TimeSpan CurrentPopulationDelay => TimeSpan.FromSeconds((1 + visibleItems.Count) * stepSecondsPerSpawn);
+        #endregion
     }
 }
