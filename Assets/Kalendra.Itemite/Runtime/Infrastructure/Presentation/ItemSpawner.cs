@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Kalendra.Itemite.Runtime.Domain.Application;
 using Kalendra.Itemite.Runtime.Infrastructure.Persistence;
 using UnityEngine;
 using UnityEngine.Pool;
+using Random = UnityEngine.Random;
 
 namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
 {
@@ -23,6 +25,8 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
             SpawnItems(10);
         }
 
+        public event Action<ItemView> ItemSpawned = _ => { };
+
         void SpawnItems(int count)
         {
             var randomItems = repo.GetRandom(count);
@@ -38,6 +42,8 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
 
                 spawn.Inject(randomItems[index]);
                 RandomizePlacing(spawn.transform);
+
+                ItemSpawned.Invoke(spawn);
             }
         }
 
@@ -50,9 +56,8 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
         {
             Vector3 randomLocation;
             do
-            {
                 randomLocation = new Vector3(Random.Range(-8f, 8f), Random.Range(-5f, 5f), 0);
-            } while(IsNotFreeLocation(randomLocation));
+            while(IsNotFreeLocation(randomLocation));
 
             return randomLocation;
         }

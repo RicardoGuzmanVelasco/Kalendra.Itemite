@@ -11,9 +11,7 @@ namespace Kalendra.Itemite.Runtime.Domain
         readonly List<Item> items = new List<Item>();
 
         public Chain(IEnumerable<Item> startingOrderedItems)
-            : this(startingOrderedItems.ToArray())
-        {
-        }
+            : this(startingOrderedItems.ToArray()) { }
 
         public Chain(params Item[] startingOrderedItems)
         {
@@ -33,6 +31,9 @@ namespace Kalendra.Itemite.Runtime.Domain
 
         public override string ToString()
         {
+            if(!items.Any())
+                return "Empty chain";
+
             var result = new StringBuilder();
 
             FormatReductionAsHeader();
