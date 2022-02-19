@@ -6,7 +6,8 @@
     "Kalendra.Itemite.Infrastructure"
   ],
   "includePlatforms": [
-    "Editor"
+    "Editor",
+    "Lumin"
   ],
   "excludePlatforms": [],
   "allowUnsafeCode": false,
