@@ -13,7 +13,7 @@ namespace Kalendra.Itemite.Runtime.Infrastructure
 
         static void ListenToItem(IItemInput item)
         {
-            item.Clicked += FindObjectOfType<ChainListener>().SwapItemSelection;
+            item.Clicked += FindObjectOfType<Chain>().SwapItemSelection;
         }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
 {
-    public class ItemView : MonoBehaviour, IItemPresenter, IItemInput
+    public class Item : MonoBehaviour, IItemPresenter, IItemInput
     {
         [SerializeField] TextMeshPro label;
 

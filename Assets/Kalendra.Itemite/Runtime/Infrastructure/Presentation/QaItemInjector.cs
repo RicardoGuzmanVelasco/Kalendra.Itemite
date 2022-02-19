@@ -5,7 +5,7 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
 {
     public class QaItemInjector : MonoBehaviour
     {
-        [SerializeField] Item itemToInject;
+        [SerializeField] Persistence.Item itemToInject;
 
         void OnValidate()
         {

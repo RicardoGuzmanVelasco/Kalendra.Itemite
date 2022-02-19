@@ -12,8 +12,8 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
     public class ItemSpawner : MonoBehaviour
     {
         readonly IItemRepo repo = new ResourcesItemRepo();
-        readonly List<ItemView> visibleItems = new List<ItemView>();
-        IObjectPool<ItemView> pool;
+        readonly List<Item> visibleItems = new List<Item>();
+        IObjectPool<Item> pool;
 
         void Awake()
         {
@@ -25,7 +25,7 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
             SpawnItems(10);
         }
 
-        public event Action<ItemView> ItemSpawned = _ => { };
+        public event Action<Item> ItemSpawned = _ => { };
 
         void SpawnItems(int count)
         {

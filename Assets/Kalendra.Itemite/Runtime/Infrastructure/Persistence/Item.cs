@@ -1,7 +1,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace Kalendra.Itemite.Runtime.Infrastructure
+namespace Kalendra.Itemite.Runtime.Infrastructure.Persistence
 {
     [CreateAssetMenu(fileName = "New Item", menuName = "Kalendra/Itemite/Item", order = 0)]
     public sealed class Item : ScriptableObject
