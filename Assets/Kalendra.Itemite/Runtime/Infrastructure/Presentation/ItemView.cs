@@ -11,7 +11,7 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
 
         Domain.Item attachedItem;
 
-        public void OnMouseDown()
+        public void OnMouseUpAsButton()
         {
             if(attachedItem is null)
                 return;
