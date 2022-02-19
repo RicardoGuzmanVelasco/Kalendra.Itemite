@@ -22,6 +22,7 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
     {
         [SerializeField] float stepSecondsPerSpawn = .5f;
         [SerializeField] SpawnStepping steppingStrategy;
+        [SerializeField] int spawningItemsCount = 10;
 
         readonly IItemRepo repo = new ResourcesItemRepo();
 
@@ -36,7 +37,7 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
 
         void Start()
         {
-            SpawnItems(10);
+            SpawnItems(spawningItemsCount);
         }
 
         public event Action<Item> ItemSpawned = _ => { };
@@ -86,6 +87,7 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
             var randomItems = repo.GetRandom(count);
             for(var i = 0; i < count; i++)
                 SpawnRandomItemByIndex(i);
+
 
             void SpawnRandomItemByIndex(int i)
             {

@@ -50,5 +50,10 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
             var foundIcon = repo.GetIconOf(attachedItem.Name);
             icon.sprite = foundIcon ? foundIcon : defaultUnknownIcon;
         }
+
+        public Domain.Item ToDomain()
+        {
+            return attachedItem;
+        }
     }
 }
