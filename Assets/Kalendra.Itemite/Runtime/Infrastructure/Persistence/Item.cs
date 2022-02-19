@@ -10,6 +10,7 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Persistence
         [SerializeField] Sprite icon;
 
         public string Id => name;
+        public Sprite Icon => icon;
 
         public Domain.Item ToDomain()
         {

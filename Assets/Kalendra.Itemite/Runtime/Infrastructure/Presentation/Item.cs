@@ -1,5 +1,6 @@
 using System;
 using Kalendra.Itemite.Runtime.Domain.Application;
+using Kalendra.Itemite.Runtime.Infrastructure.Persistence;
 using TMPro;
 using UnityEngine;
 
@@ -8,6 +9,8 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
     public class Item : MonoBehaviour, IItemPresenter, IItemInput
     {
         [SerializeField] TextMeshPro label;
+
+        readonly IVisualItemRepo repo = new ResourcesItemRepo();
 
         Domain.Item attachedItem;
 
