@@ -4,6 +4,6 @@ namespace Kalendra.Itemite.Runtime.Domain.Application
 {
     public interface IItemRepo
     {
-        IEnumerable<Item> GetRandom(int count);
+        IList<Item> GetRandom(int count);
     }
 }

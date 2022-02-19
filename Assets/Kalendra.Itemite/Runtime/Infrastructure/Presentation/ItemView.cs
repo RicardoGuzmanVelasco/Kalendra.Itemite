@@ -13,12 +13,15 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
 
         public void OnMouseDown()
         {
-            Clicked.Invoke();
+            if(attachedItem is null)
+                return;
+
+            Clicked.Invoke(attachedItem);
         }
 
-        public event Action Clicked = () => { };
+        public event Action<Domain.Item> Clicked = _ => { };
 
-        void IItemPresenter.Inject(Domain.Item item)
+        public void Inject(Domain.Item item)
         {
             attachedItem = item;
             DrawItem();
@@ -27,6 +30,7 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
         void DrawItem()
         {
             label.text = attachedItem.Name;
+            transform.name = attachedItem.Name;
         }
     }
 }

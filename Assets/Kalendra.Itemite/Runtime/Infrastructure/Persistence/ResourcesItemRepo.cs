@@ -7,11 +7,11 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Persistence
 {
     public class ResourcesItemRepo : IItemRepo
     {
-        public IEnumerable<Domain.Item> GetRandom(int count)
+        public IList<Domain.Item> GetRandom(int count)
         {
             var all = Resources.LoadAll<Item>("Items");
             if(all.Length <= count)
-                return all.Select(i => i.ToDomain());
+                return all.Select(i => i.ToDomain()).ToList();
 
             var result = new List<Item>();
             while(result.Count < count)
@@ -21,7 +21,7 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Persistence
                     result.Add(random);
             }
 
-            return result.Select(i => i.ToDomain());
+            return result.Select(i => i.ToDomain()).ToList();
         }
     }
 }

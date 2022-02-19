@@ -4,6 +4,6 @@ namespace Kalendra.Itemite.Runtime.Domain.Application
 {
     public interface IItemInput
     {
-        event Action Clicked;
+        event Action<Item> Clicked;
     }
 }
