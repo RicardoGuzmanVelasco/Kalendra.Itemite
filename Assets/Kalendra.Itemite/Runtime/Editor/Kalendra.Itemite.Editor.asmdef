@@ -1,0 +1,19 @@
+{
+  "name": "Kalendra.Itemite.Editor",
+  "rootNamespace": "",
+  "references": [
+    "Kalendra.Itemite.Domain",
+    "Kalendra.Itemite.Infrastructure"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

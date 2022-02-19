@@ -8,11 +8,20 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
 {
     public class Item : MonoBehaviour, IItemPresenter, IItemInput
     {
-        [SerializeField] TextMeshPro label;
+        [SerializeField] Sprite defaultUnknownIcon;
 
         readonly IVisualItemRepo repo = new ResourcesItemRepo();
 
         Domain.Item attachedItem;
+        SpriteRenderer icon;
+
+        TextMeshPro[] labels;
+
+        void Awake()
+        {
+            labels = GetComponentsInChildren<TextMeshPro>();
+            icon = GetComponentInChildren<SpriteRenderer>();
+        }
 
         void OnMouseUp()
         {
@@ -33,8 +42,13 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
 
         void DrawItem()
         {
-            label.text = attachedItem.Name;
             transform.name = attachedItem.Name;
+
+            foreach(var label in labels)
+                label.text = attachedItem.Name;
+
+            var foundIcon = repo.GetIconOf(attachedItem.Name);
+            icon.sprite = foundIcon ? foundIcon : defaultUnknownIcon;
         }
     }
 }
