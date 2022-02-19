@@ -1,11 +1,12 @@
 using Kalendra.Itemite.Runtime.Domain.Application;
+using Kalendra.Itemite.Runtime.Infrastructure.Persistence;
 using UnityEngine;
 
-namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
+namespace Kalendra.Itemite.Runtime.Editor
 {
     public class QaItemInjector : MonoBehaviour
     {
-        [SerializeField] Persistence.Item itemToInject;
+        [SerializeField] Item itemToInject;
 
         void OnValidate()
         {
