@@ -44,7 +44,6 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
         void RandomizePlacing(Transform item)
         {
             item.Translate(EmptyLocation());
-            item.Rotate(0, 0, Random.Range(-45f, 45f));
         }
 
         Vector3 EmptyLocation()
@@ -52,7 +51,7 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
             Vector3 randomLocation;
             do
             {
-                randomLocation = new Vector3(Random.Range(-8.5f, 8.5f), Random.Range(-5.5f, 5.5f), 0);
+                randomLocation = new Vector3(Random.Range(-8f, 8f), Random.Range(-5f, 5f), 0);
             } while(IsNotFreeLocation(randomLocation));
 
             return randomLocation;
