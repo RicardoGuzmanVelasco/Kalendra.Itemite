@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using Kalendra.Itemite.Runtime.Infrastructure.Presentation;
 using UnityEngine;
-using Item = Kalendra.Itemite.Runtime.Domain.Item;
 
 namespace Kalendra.Itemite.Runtime.Infrastructure
 {
@@ -13,7 +13,7 @@ namespace Kalendra.Itemite.Runtime.Infrastructure
         {
             FindObjectOfType<ItemSpawner>().ItemSpawned += ListenToItem;
 
-            void ListenToItem(Presentation.Item item)
+            void ListenToItem(Item item)
             {
                 item.Clicked += SwapItemSelection;
             }
@@ -22,11 +22,25 @@ namespace Kalendra.Itemite.Runtime.Infrastructure
         public void SwapItemSelection(Item item)
         {
             if(selectedItems.Contains(item))
-                selectedItems.Clear();
+                DeselectAll();
             else
-                selectedItems.Add(item);
+                Select(item);
 
-            Debug.Log(new Domain.Chain(selectedItems));
+            Debug.Log(new Domain.Chain(selectedItems.Select(i => i.ToDomain())));
+
+            void DeselectAll()
+            {
+                foreach(var item in selectedItems)
+                    item.Selected = false;
+
+                selectedItems.Clear();
+            }
+
+            void Select(Item i)
+            {
+                i.Selected = true;
+                selectedItems.Add(i);
+            }
         }
     }
 }

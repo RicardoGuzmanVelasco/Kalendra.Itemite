@@ -6,16 +6,16 @@ using UnityEngine;
 
 namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
 {
-    public class Item : MonoBehaviour, IItemPresenter, IItemInput
+    public class Item : MonoBehaviour, IItemPresenter
     {
         [SerializeField] Sprite defaultUnknownIcon;
 
         readonly IVisualItemRepo repo = new ResourcesItemRepo();
-
         Domain.Item attachedItem;
         SpriteRenderer icon;
-
         TextMeshPro[] labels;
+
+        bool selected;
 
         void Awake()
         {
@@ -28,12 +28,27 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
             if(attachedItem is null)
                 return;
 
-            Clicked.Invoke(attachedItem);
+            Clicked.Invoke(this);
         }
 
-        public event Action<Domain.Item> Clicked = _ => { };
+        public bool Selected
+        {
+            get => selected;
+            set
+            {
+                selected = value;
+                icon.color = icon.color.With(selected ? .75f : 1f);
+            }
+        }
 
+        public event Action<Item> Clicked = _ => { };
 
+        public Domain.Item ToDomain()
+        {
+            return attachedItem;
+        }
+
+        #region IItemPresenter implementation
         public void Inject(Domain.Item item)
         {
             attachedItem = item;
@@ -50,10 +65,6 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
             var foundIcon = repo.GetIconOf(attachedItem.Name);
             icon.sprite = foundIcon ? foundIcon : defaultUnknownIcon;
         }
-
-        public Domain.Item ToDomain()
-        {
-            return attachedItem;
-        }
+        #endregion
     }
 }
