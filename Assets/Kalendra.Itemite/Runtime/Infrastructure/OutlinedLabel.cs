@@ -5,8 +5,8 @@ namespace Kalendra.Itemite.Runtime.Infrastructure
 {
     public class OutlinedLabel : MonoBehaviour, ILabel
     {
-        [SerializeField] TextMeshPro outline;
-        [SerializeField] TextMeshPro content;
+        [SerializeField] TMP_Text outline;
+        [SerializeField] TMP_Text content;
 
         public string Text
         {

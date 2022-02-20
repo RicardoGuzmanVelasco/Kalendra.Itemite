@@ -1,20 +1,27 @@
 using System.Collections;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Kalendra.Itemite.Runtime.Infrastructure;
+using Kalendra.Pokemite.Infrastructure;
 using PokeApiNet;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 namespace Kalendra.Pokemite
 {
     public class TestPokeApi : MonoBehaviour
     {
-        readonly PokeApiClient client = new PokeApiClient();
+        readonly PkmnRepo repo = new PkmnRepo();
 
         async void Start()
         {
-            var pikachu = await AwaitForPikachu();
+            var pkmn = await AwaitForRandomPkmn();
 
-            StartCoroutine(LoadSprite(pikachu.Sprites.FrontDefault));
+            //StartCoroutine(LoadSprite(pikachu.Sprites.FrontDefault));
+
+            StartCoroutine(LoadSprite($"https://cdn.traction.one/pokedex/pokemon/{pkmn.Id}.png"));
+            FindObjectOfType<OutlinedLabel>().Text = pkmn.Name;
         }
 
         IEnumerator LoadSprite(string url)
@@ -22,10 +29,12 @@ namespace Kalendra.Pokemite
             using var request = UnityWebRequestTexture.GetTexture(url);
 
             yield return request.SendWebRequest();
+            if(request.error != null)
+                throw new HttpRequestException(request.error);
 
             var texture = DownloadHandlerTexture.GetContent(request);
 
-            // render.sprite = SpriteFrom(texture);
+            FindObjectOfType<Image>().sprite = SpriteFrom(texture);
         }
 
         Sprite SpriteFrom(Texture2D texture)
@@ -33,9 +42,9 @@ namespace Kalendra.Pokemite
             return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.one * .5f, 100f);
         }
 
-        async Task<Pokemon> AwaitForPikachu()
+        async Task<Pokemon> AwaitForRandomPkmn()
         {
-            return await client.GetResourceAsync<Pokemon>("pikachu");
+            return await repo.GetRandomPkmn();
         }
     }
 }

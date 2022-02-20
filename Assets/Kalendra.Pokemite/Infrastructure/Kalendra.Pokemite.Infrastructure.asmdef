@@ -2,8 +2,9 @@
   "name": "Kalendra.Pokemite.Infrastructure",
   "rootNamespace": "",
   "references": [
-    "GUID:65331a20fffb44299f060b49ee1aadd5",
-    "GUID:132d1f416317b384c9ab53ecfd08ac60"
+      "GUID:65331a20fffb44299f060b49ee1aadd5",
+      "GUID:132d1f416317b384c9ab53ecfd08ac60",
+      "GUID:9dc00ca960864242976adbfbb769a80f"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],
