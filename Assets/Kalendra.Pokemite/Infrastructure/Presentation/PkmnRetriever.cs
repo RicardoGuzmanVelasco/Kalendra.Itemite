@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PokeApiNet;
 using UnityEngine;
 
 namespace Kalendra.Pokemite.Infrastructure.Presentation
@@ -24,13 +23,15 @@ namespace Kalendra.Pokemite.Infrastructure.Presentation
 
         async Task RandomizeRound()
         {
-            await InjectInCard(await repo.GetRandomPkmn(), cards.First());
-            await InjectInCard(await repo.GetRandomPkmn(), cards.Last());
+            await Task.WhenAll(cards.Select(RandomizeCard));
         }
 
-        async Task InjectInCard(Pokemon pkmn, PkmnCard card)
+        async Task RandomizeCard(PkmnCard card)
         {
-            card.Inject(pkmn.Name, await repo.GetSpriteOfPkmn(pkmn));
+            var pkmn = await repo.GetRandomPkmn();
+            var sprite = await repo.GetSpriteOfPkmn(pkmn);
+
+            card.Inject(pkmn.Name, sprite);
         }
     }
 }
