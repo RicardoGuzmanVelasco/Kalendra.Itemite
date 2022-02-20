@@ -2,17 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Zenject;
 
 namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
 {
     public class Chain : MonoBehaviour
     {
         readonly List<Item> selectedItems = new List<Item>();
+
+        [Inject] readonly ItemSpawner spawner;
         Domain.Chain CurrentChain => new Domain.Chain(selectedItems.Select(item => item.ToDomain()));
 
         void Awake()
         {
-            FindObjectOfType<ItemSpawner>().ItemSpawned += ListenToItem;
+            spawner.ItemSpawned += ListenToItem;
 
             void ListenToItem(Item item)
             {

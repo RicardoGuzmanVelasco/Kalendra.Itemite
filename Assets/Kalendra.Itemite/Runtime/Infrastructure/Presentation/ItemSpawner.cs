@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Kalendra.Itemite.Runtime.Domain.Application;
-using Kalendra.Itemite.Runtime.Infrastructure.Persistence;
 using UnityEngine;
 using UnityEngine.Pool;
+using Zenject;
 using Random = UnityEngine.Random;
 
 namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
@@ -24,7 +24,7 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
         [SerializeField] SpawnStepping steppingStrategy;
         [SerializeField] int spawningItemsCount = 10;
 
-        readonly IItemRepo repo = new ResourcesItemRepo();
+        [Inject] readonly IItemRepo repo;
 
         readonly List<Item> visibleItems = new List<Item>();
         IObjectPool<Item> pool;
