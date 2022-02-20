@@ -1,9 +1,7 @@
 {
-  "name": "PokeApi",
+  "name": "PokeApi.Model",
   "rootNamespace": "",
-  "references": [
-    "PokeApi.Model"
-  ],
+  "references": [],
   "includePlatforms": [],
   "excludePlatforms": [],
   "allowUnsafeCode": false,

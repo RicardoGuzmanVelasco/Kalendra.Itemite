@@ -2,17 +2,16 @@ using System.Collections;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Kalendra.Itemite.Runtime.Infrastructure;
-using Kalendra.Pokemite.Infrastructure;
 using PokeApiNet;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-namespace Kalendra.Pokemite
+namespace Kalendra.Pokemite.Infrastructure
 {
     public class TestPokeApi : MonoBehaviour
     {
-        readonly PkmnRepo repo = new PkmnRepo();
+        readonly PokeApiClientAdapter repo = new PokeApiClientAdapter();
 
         async void Start()
         {

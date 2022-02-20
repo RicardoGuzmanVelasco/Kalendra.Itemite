@@ -1,3 +1,16 @@
 {
-  "name": "Kalendra.Pokemite.Domain"
+  "name": "Kalendra.Pokemite.Domain",
+  "rootNamespace": "",
+  "references": [
+    "PokeApi.Model"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
 }
