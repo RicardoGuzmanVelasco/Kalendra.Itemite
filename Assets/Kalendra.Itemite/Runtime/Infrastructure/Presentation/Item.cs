@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using Kalendra.Itemite.Runtime.Domain.Application;
 using Kalendra.Itemite.Runtime.Infrastructure.Persistence;
 using UnityEngine;
@@ -37,10 +38,8 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
             set
             {
                 selected = value;
-                label.Color = selected &&
-                              ColorUtility.TryParseHtmlString("#10FF4D", out var color)
-                    ? color
-                    : Color.white;
+                ToggleSelectedTween();
+                ToggleSelectedText();
             }
         }
 
@@ -65,6 +64,31 @@ namespace Kalendra.Itemite.Runtime.Infrastructure.Presentation
 
             var foundIcon = repo.GetIconOf(attachedItem.Name);
             icon.sprite = foundIcon ? foundIcon : defaultUnknownIcon;
+        }
+        #endregion
+
+        #region Animation
+        void ToggleSelectedTween()
+        {
+            if(selected)
+                transform
+                    .DOShakePosition(
+                        .5f,
+                        .025f,
+                        50,
+                        fadeOut: false)
+                    .SetEase(Ease.Linear)
+                    .SetLoops(-1);
+            else
+                transform.DOKill();
+        }
+
+        void ToggleSelectedText()
+        {
+            label.Color = selected &&
+                          ColorUtility.TryParseHtmlString("#10FF4D", out var color)
+                ? color
+                : Color.white;
         }
         #endregion
     }
