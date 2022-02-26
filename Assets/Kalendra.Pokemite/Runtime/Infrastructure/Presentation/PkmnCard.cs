@@ -5,7 +5,7 @@ using PokeApiNet;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Kalendra.Pokemite.Infrastructure.Presentation
+namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
 {
     public class PkmnCard : MonoBehaviour
     {

@@ -4,3 +4,5 @@
 - [ ] Refactor: PkmnCard alpha control to view component "fadeable canvas group" or whatnot
 - [ ] Add: repo cache!!!
 - [ ] Refactor: pkmnCard injection dto Pokemon+Sprite
+- [ ] Add: Show/Hide slots panel when ContinueWithInMainThread it's available
+  - SetActive() does not work when on threading...

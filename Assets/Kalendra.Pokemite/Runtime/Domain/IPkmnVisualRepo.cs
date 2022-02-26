@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using PokeApiNet;
 using UnityEngine;
 
-namespace Kalendra.Pokemite.Domain
+namespace Kalendra.Pokemite.Runtime.Domain
 {
     public interface IPkmnVisualRepo
     {

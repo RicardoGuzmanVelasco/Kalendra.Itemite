@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Kalendra.Pokemite.Infrastructure.Presentation
+namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
 {
     [RequireComponent(typeof(RawImage))]
     public class ParallaxRawImage : MonoBehaviour

@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using PokeApiNet;
 
-namespace Kalendra.Pokemite.Domain
+namespace Kalendra.Pokemite.Runtime.Domain
 {
     public interface IPkmnRepo
     {

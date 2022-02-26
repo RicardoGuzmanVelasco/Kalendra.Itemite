@@ -1,4 +1,4 @@
-namespace Kalendra.Pokemite.Domain
+namespace Kalendra.Pokemite.Runtime.Domain
 {
     public interface IRelatable<in T>
     {

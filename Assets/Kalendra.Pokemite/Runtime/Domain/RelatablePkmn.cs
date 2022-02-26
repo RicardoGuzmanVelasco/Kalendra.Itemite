@@ -1,6 +1,6 @@
 using PokeApiNet;
 
-namespace Kalendra.Pokemite.Domain
+namespace Kalendra.Pokemite.Runtime.Domain
 {
     public class RelatablePkmn : IRelatable<RelatablePkmn>
     {
