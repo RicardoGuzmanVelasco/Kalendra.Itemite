@@ -1,4 +1,6 @@
+using System.Threading.Tasks;
 using Kalendra.Itemite.Runtime.Infrastructure;
+using Kalendra.Pokemite.Runtime.Domain;
 using UnityEngine;
 
 namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
@@ -24,6 +26,13 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
         public void HideResult()
         {
             resultLabel.gameObject.SetActive(false);
+        }
+
+        public async Task AnimateResult(PkmnVisualDto selected)
+        {
+            ShowResult(10, false);
+            await Task.Delay(1000);
+            HideResult();
         }
     }
 }

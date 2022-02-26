@@ -23,25 +23,18 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
 
         async Task PlayRound()
         {
-            Debug.Log("Randomizing round");
             await candidatesController.RandomizeRound();
-            Debug.Log("Round ready");
 
-            Debug.Log("Choose!");
             var selected = await candidatesController.WaitForSelection();
-            Debug.Log("Choice ready");
 
-            resultController.ComputeNewChoice(selected);
+            await candidatesController.ShowChoice(selected);
+            resultController.UpdateScore(selected);
             currentController.UpdateCurrent(selected);
         }
 
         async Task SetFirstPokemon()
         {
-            Debug.Log("Start");
-
-            Debug.Log("Getting first selected");
             await currentController.RandomizeFirst();
-            Debug.Log("First selected ready");
         }
     }
 }

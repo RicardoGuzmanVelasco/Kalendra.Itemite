@@ -14,7 +14,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
 
         float accResult;
 
-        public void ComputeNewChoice(PkmnVisualDto choice)
+        public void UpdateScore(PkmnVisualDto choice)
         {
             var points = Relate(currentPkmnCard.Contained, choice.Pkmn);
 

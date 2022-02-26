@@ -33,7 +33,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
             Hide();
         }
 
-        public event Action<PkmnVisualDto> Selected = _ => Debug.Log("PkmnCard: Selected: " + _.Pkmn.Name);
+        public event Action<PkmnVisualDto> Selected = _ => { };
 
         void Hide()
         {

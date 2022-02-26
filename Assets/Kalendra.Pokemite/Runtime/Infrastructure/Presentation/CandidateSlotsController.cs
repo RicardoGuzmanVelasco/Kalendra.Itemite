@@ -10,15 +10,17 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
     public class CandidateSlotsController : MonoBehaviour
     {
         [SerializeField] GameObject candidateSlotsContainer;
-
         [Inject] readonly PokeApiClientAdapter repo;
 
-        IList<PkmnCard> cards;
+        IEnumerable<PkmnCard> cards;
+
         TaskCompletionSource<PkmnVisualDto> selectPokemonAwaiter;
+        IEnumerable<PkmnCandidateSlot> slots;
 
         void Awake()
         {
             cards = candidateSlotsContainer.GetComponentsInChildren<PkmnCard>();
+            slots = cards.Select(c => c.GetComponentInParent<PkmnCandidateSlot>());
         }
 
         public async Task RandomizeRound()
@@ -49,6 +51,11 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
         void CardSelected(PkmnVisualDto pkmn)
         {
             selectPokemonAwaiter.SetResult(pkmn);
+        }
+
+        public async Task ShowChoice(PkmnVisualDto selectedChoice)
+        {
+            await Task.WhenAll(slots.Select(s => s.AnimateResult(selectedChoice)));
         }
     }
 }
