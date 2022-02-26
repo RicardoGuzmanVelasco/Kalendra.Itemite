@@ -5,24 +5,28 @@ using UnityEngine;
 
 namespace Kalendra.Pokemite.Infrastructure.Presentation
 {
-    public class PkmnRetriever : MonoBehaviour
+    public class CandidateSlotsController : MonoBehaviour
     {
         readonly PokeApiClientAdapter repo = new PokeApiClientAdapter();
 
-        IList<PkmnCard> cards;
+        IEnumerable<PkmnCard> cards;
 
         void Awake()
         {
             cards = FindObjectsOfType<PkmnCard>();
         }
 
-        async void Start()
+        void Start()
         {
-            await RandomizeRound();
+            foreach(var card in cards)
+                card.gameObject.SetActive(false);
         }
 
-        async Task RandomizeRound()
+        public async Task RandomizeRound()
         {
+            foreach(var card in cards)
+                card.gameObject.SetActive(true);
+
             await Task.WhenAll(cards.Select(RandomizeCard));
         }
 
