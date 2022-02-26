@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Kalendra.Pokemite.Runtime.Domain;
 using Kalendra.Pokemite.Runtime.Infrastructure.Presentation;
+using PokeApiNet;
 using UnityEngine;
 
 namespace Kalendra.Pokemite.Runtime.Infrastructure
@@ -10,6 +11,8 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
         [SerializeField] PkmnCard card;
 
         readonly PokeApiClientAdapter repo = new PokeApiClientAdapter();
+
+        public Pokemon CurrentPkmn => card.Pkmn;
 
         public async Task RandomizeFirst()
         {

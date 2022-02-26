@@ -27,7 +27,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
 
             var selected = await candidatesController.WaitForSelection();
 
-            await candidatesController.ShowChoice(selected);
+            await candidatesController.ShowCardScores(currentController.CurrentPkmn);
             resultController.UpdateScore(selected);
             currentController.UpdateCurrent(selected);
         }

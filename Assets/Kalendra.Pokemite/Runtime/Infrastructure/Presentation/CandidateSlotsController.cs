@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Kalendra.Pokemite.Runtime.Domain;
+using PokeApiNet;
 using UnityEngine;
 using Zenject;
 
@@ -15,12 +16,10 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
         IEnumerable<PkmnCard> cards;
 
         TaskCompletionSource<PkmnVisualDto> selectPokemonAwaiter;
-        IEnumerable<PkmnCandidateSlot> slots;
 
         void Awake()
         {
             cards = candidateSlotsContainer.GetComponentsInChildren<PkmnCard>();
-            slots = cards.Select(c => c.GetComponentInParent<PkmnCandidateSlot>());
         }
 
         public async Task RandomizeRound()
@@ -53,9 +52,26 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
             selectPokemonAwaiter.SetResult(pkmn);
         }
 
-        public async Task ShowChoice(PkmnVisualDto selectedChoice)
+        public async Task ShowCardScores(Pokemon currentPkmn)
         {
-            await Task.WhenAll(slots.Select(s => s.AnimateResult(selectedChoice)));
+            var relations = cards.Select(card => Relate(currentPkmn, card.Pkmn)).ToList();
+
+            await Task.WhenAll
+            (
+                cards.Select
+                ((card, i) =>
+                    card.GetComponentInParent<PkmnCandidateSlot>()
+                        .AnimateResult((int)relations[i], relations[i] >= relations.Max())
+                )
+            );
+        }
+
+        static float Relate(Pokemon currentPkmn, Pokemon cardPkmn)
+        {
+            return
+                new RelatablePkmn(currentPkmn)
+                    .RelateWith(
+                        new RelatablePkmn(cardPkmn));
         }
     }
 }

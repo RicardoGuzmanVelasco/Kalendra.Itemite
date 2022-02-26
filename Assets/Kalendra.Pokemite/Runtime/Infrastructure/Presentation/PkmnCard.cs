@@ -17,7 +17,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
         float originalAlpha = 1f;
         Image picture;
 
-        public Pokemon Contained { get; private set; }
+        public Pokemon Pkmn { get; private set; }
         bool IsHidden => canvasGroup.alpha == 0;
 
         void Awake()
@@ -51,7 +51,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
 
         void Inject(Pokemon pkmn, Sprite pkmnSprite)
         {
-            Contained = pkmn;
+            Pkmn = pkmn;
             label.Text = pkmn.Name;
             picture.sprite = pkmnSprite;
 
@@ -74,7 +74,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
         {
             var dto = new PkmnVisualDto
             {
-                Pkmn = Contained,
+                Pkmn = Pkmn,
                 Sprite = picture.sprite
             };
             Selected.Invoke(dto);
