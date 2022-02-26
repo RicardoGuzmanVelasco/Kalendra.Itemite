@@ -42,6 +42,7 @@ namespace Kalendra.Pokemite.Infrastructure.Presentation
             selectPokemonAwaiter = new TaskCompletionSource<Pokemon>();
             await selectPokemonAwaiter.Task;
 
+
             foreach(var card in cards)
                 card.Selected -= CardSelected;
         }

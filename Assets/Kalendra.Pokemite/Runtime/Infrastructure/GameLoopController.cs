@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Kalendra.Pokemite.Infrastructure.Presentation;
 using UnityEngine;
 
@@ -16,12 +17,16 @@ namespace Kalendra.Pokemite.Infrastructure
 
         async void Start()
         {
-            Debug.Log("Start");
+            await SetFirstPokemon();
 
-            Debug.Log("Getting first selected");
-            await currentController.RandomizeFirst();
-            Debug.Log("First selected ready");
+            do
+            {
+                await PlayRounds();
+            } while(true);
+        }
 
+        async Task PlayRounds()
+        {
             Debug.Log("Randomizing round");
             await candidatesController.RandomizeRound();
             Debug.Log("Round ready");
@@ -29,6 +34,15 @@ namespace Kalendra.Pokemite.Infrastructure
             Debug.Log("Choose!");
             await candidatesController.WaitForSelection();
             Debug.Log("Choice ready");
+        }
+
+        async Task SetFirstPokemon()
+        {
+            Debug.Log("Start");
+
+            Debug.Log("Getting first selected");
+            await currentController.RandomizeFirst();
+            Debug.Log("First selected ready");
         }
     }
 }

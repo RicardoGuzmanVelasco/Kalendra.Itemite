@@ -31,7 +31,7 @@ namespace Kalendra.Pokemite.Infrastructure.Presentation
             Hide();
         }
 
-        public event Action<Pokemon> Selected = _ => Debug.Log("Selected: " + _.Name);
+        public event Action<Pokemon> Selected = _ => Debug.Log("PkmnCard: Selected: " + _.Name);
 
         void Hide()
         {
