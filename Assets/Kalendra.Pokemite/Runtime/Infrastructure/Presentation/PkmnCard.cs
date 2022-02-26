@@ -1,6 +1,7 @@
 using System;
 using DG.Tweening;
 using Kalendra.Itemite.Runtime.Infrastructure;
+using Kalendra.Pokemite.Runtime.Domain;
 using PokeApiNet;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,7 +32,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
             Hide();
         }
 
-        public event Action<PokemonVisualDto> Selected = _ => Debug.Log("PkmnCard: Selected: " + _.Pkmn.Name);
+        public event Action<PkmnVisualDto> Selected = _ => Debug.Log("PkmnCard: Selected: " + _.Pkmn.Name);
 
         void Hide()
         {
@@ -42,7 +43,12 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
             canvasGroup.alpha = 0;
         }
 
-        public void Inject(Pokemon pkmn, Sprite pkmnSprite)
+        public void Inject(PkmnVisualDto dto)
+        {
+            Inject(dto.Pkmn, dto.Sprite);
+        }
+
+        void Inject(Pokemon pkmn, Sprite pkmnSprite)
         {
             containedPokemon = pkmn;
             label.Text = pkmn.Name;
@@ -65,7 +71,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
 
         public void OnClick()
         {
-            var dto = new PokemonVisualDto
+            var dto = new PkmnVisualDto
             {
                 Pkmn = containedPokemon,
                 Sprite = picture.sprite

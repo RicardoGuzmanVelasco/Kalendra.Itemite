@@ -31,9 +31,26 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
         }
 
         #region Visual
-        public async Task<Sprite> GetSpriteOfPkmn(Pokemon pkmn)
+        public async Task<PkmnVisualDto> GetRandomVisualPkmn()
         {
-            using var request = UnityWebRequestTexture.GetTexture(Url(pkmn.Id));
+            var id = random.Next(1, PokemonCount + 1);
+
+            Pokemon pkmn;
+            pkmn = await GetPkmn(id);
+
+            Sprite sprite;
+            sprite = await GetSpriteOfPkmnById(id);
+
+            return new PkmnVisualDto
+            {
+                Pkmn = pkmn,
+                Sprite = sprite
+            };
+        }
+
+        public async Task<Sprite> GetSpriteOfPkmnById(int id)
+        {
+            using var request = UnityWebRequestTexture.GetTexture(Url(id));
 
             var asyncOp = request.SendWebRequest();
 
@@ -53,7 +70,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
             return $"https://cdn.traction.one/pokedex/pokemon/{id}.png";
         }
 
-        Sprite SpriteFrom(Texture2D texture)
+        static Sprite SpriteFrom(Texture2D texture)
         {
             return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.one * .5f, 100f);
         }

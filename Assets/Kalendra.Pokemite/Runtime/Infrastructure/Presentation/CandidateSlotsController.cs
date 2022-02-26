@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Kalendra.Pokemite.Runtime.Domain;
 using UnityEngine;
 using Zenject;
 
@@ -14,7 +15,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
         [Inject] readonly CurrentSelectedController selectedController;
 
         IList<PkmnCard> cards;
-        TaskCompletionSource<PokemonVisualDto> selectPokemonAwaiter;
+        TaskCompletionSource<PkmnVisualDto> selectPokemonAwaiter;
 
         void Awake()
         {
@@ -28,10 +29,8 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
 
         async Task RandomizeCard(PkmnCard card)
         {
-            var pkmn = await repo.GetRandomPkmn();
-            var sprite = await repo.GetSpriteOfPkmn(pkmn);
-
-            card.Inject(pkmn, sprite);
+            var pkmn = await repo.GetRandomVisualPkmn();
+            card.Inject(pkmn);
         }
 
         public async Task WaitForSelection()
@@ -39,7 +38,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
             foreach(var card in cards)
                 card.Selected += CardSelected;
 
-            selectPokemonAwaiter = new TaskCompletionSource<PokemonVisualDto>();
+            selectPokemonAwaiter = new TaskCompletionSource<PkmnVisualDto>();
             await selectPokemonAwaiter.Task;
 
             foreach(var card in cards)
@@ -54,7 +53,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
             await Task.CompletedTask;
         }
 
-        void CardSelected(PokemonVisualDto pkmn)
+        void CardSelected(PkmnVisualDto pkmn)
         {
             selectPokemonAwaiter.SetResult(pkmn);
         }

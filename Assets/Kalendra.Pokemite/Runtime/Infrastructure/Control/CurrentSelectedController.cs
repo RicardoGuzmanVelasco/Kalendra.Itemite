@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
+using Kalendra.Pokemite.Runtime.Domain;
 using Kalendra.Pokemite.Runtime.Infrastructure.Presentation;
-using PokeApiNet;
 using UnityEngine;
 
 namespace Kalendra.Pokemite.Runtime.Infrastructure
@@ -13,21 +13,12 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
 
         public async Task RandomizeFirst()
         {
-            var pkmn = await repo.GetRandomPkmn();
-            var sprite = await repo.GetSpriteOfPkmn(pkmn);
-
-            card.Inject(pkmn, sprite);
+            UpdateCurrent(await repo.GetRandomVisualPkmn());
         }
 
-        public void UpdateCurrent(PokemonVisualDto dto)
+        public void UpdateCurrent(PkmnVisualDto dto)
         {
-            card.Inject(dto.Pkmn, dto.Sprite);
+            card.Inject(dto);
         }
-    }
-
-    public class PokemonVisualDto
-    {
-        public Pokemon Pkmn { get; set; }
-        public Sprite Sprite { get; set; }
     }
 }
