@@ -31,7 +31,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
             Hide();
         }
 
-        public event Action<Pokemon> Selected = _ => Debug.Log("PkmnCard: Selected: " + _.Name);
+        public event Action<PokemonVisualDto> Selected = _ => Debug.Log("PkmnCard: Selected: " + _.Pkmn.Name);
 
         void Hide()
         {
@@ -65,7 +65,12 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
 
         public void OnClick()
         {
-            Selected.Invoke(containedPokemon);
+            var dto = new PokemonVisualDto
+            {
+                Pkmn = containedPokemon,
+                Sprite = picture.sprite
+            };
+            Selected.Invoke(dto);
         }
     }
 }

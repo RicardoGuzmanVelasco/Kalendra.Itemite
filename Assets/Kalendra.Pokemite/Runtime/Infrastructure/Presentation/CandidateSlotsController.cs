@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PokeApiNet;
 using UnityEngine;
 using Zenject;
 
@@ -15,7 +14,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
         [Inject] readonly CurrentSelectedController selectedController;
 
         IList<PkmnCard> cards;
-        TaskCompletionSource<Pokemon> selectPokemonAwaiter;
+        TaskCompletionSource<PokemonVisualDto> selectPokemonAwaiter;
 
         void Awake()
         {
@@ -40,7 +39,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
             foreach(var card in cards)
                 card.Selected += CardSelected;
 
-            selectPokemonAwaiter = new TaskCompletionSource<Pokemon>();
+            selectPokemonAwaiter = new TaskCompletionSource<PokemonVisualDto>();
             await selectPokemonAwaiter.Task;
 
             foreach(var card in cards)
@@ -50,13 +49,12 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
         public async Task UpdateCurrentPkmnWithLastSelected()
         {
             var selectedPkmn = selectPokemonAwaiter.Task.Result;
-
-            selectedController.UpdateCurrent(new PokemonVisualDto { Pkmn = selectedPkmn });
+            selectedController.UpdateCurrent(selectedPkmn);
 
             await Task.CompletedTask;
         }
 
-        void CardSelected(Pokemon pkmn)
+        void CardSelected(PokemonVisualDto pkmn)
         {
             selectPokemonAwaiter.SetResult(pkmn);
         }
