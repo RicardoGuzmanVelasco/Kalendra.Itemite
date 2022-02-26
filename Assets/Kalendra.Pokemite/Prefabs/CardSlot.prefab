@@ -123,7 +123,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2230487615462049432}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 820636411913034460}
+        m_TargetAssemblyTypeName: Kalendra.Pokemite.Infrastructure.Presentation.PkmnCard,
+          Kalendra.Pokemite.Infrastructure
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!82 &5149638425642248527
 AudioSource:
   m_ObjectHideFlags: 0
@@ -348,6 +361,17 @@ PrefabInstance:
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: cb682b9bb1d841b488c1826b0d8ad822, type: 3}
+--- !u!114 &820636411913034460 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 294887884807275804, guid: cb682b9bb1d841b488c1826b0d8ad822, type: 3}
+  m_PrefabInstance: {fileID: 1113755319799046080}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d75109d5691f15744b85c901838d6167, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &7961372616455995261 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6992015139317964989, guid: cb682b9bb1d841b488c1826b0d8ad822, type: 3}

@@ -1,0 +1,6 @@
+- [ ] Refactor: repo finds a whole dto with Pokemon+Sprite
+- [ ] Add: repo get by constructor a range of Id where to randomize from
+- [ ] Refactor: IController
+- [ ] Refactor: PkmnCard alpha control to view component "fadeable canvas group" or whatnot
+- [ ] Add: repo cache!!!
+- [ ] Refactor: pkmnCard injection dto Pokemon+Sprite

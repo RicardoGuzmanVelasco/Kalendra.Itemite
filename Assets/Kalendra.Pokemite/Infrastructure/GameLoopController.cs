@@ -5,19 +5,30 @@ namespace Kalendra.Pokemite.Infrastructure
 {
     public class GameLoopController : MonoBehaviour
     {
-        CandidateSlotsController retriever;
+        CandidateSlotsController candidatesController;
+        CurrentSelectedController currentController;
 
         void Awake()
         {
-            retriever = FindObjectOfType<CandidateSlotsController>();
+            currentController = FindObjectOfType<CurrentSelectedController>();
+            candidatesController = FindObjectOfType<CandidateSlotsController>();
         }
 
         async void Start()
         {
             Debug.Log("Start");
-            Debug.Log("Retrieving");
-            await retriever.RandomizeRound();
-            Debug.Log("Retrieved!");
+
+            Debug.Log("Getting first selected");
+            await currentController.RandomizeFirst();
+            Debug.Log("First selected ready");
+
+            Debug.Log("Randomizing round");
+            await candidatesController.RandomizeRound();
+            Debug.Log("Round ready");
+
+            Debug.Log("Choose!");
+            await candidatesController.WaitForSelection();
+            Debug.Log("Choice ready");
         }
     }
 }

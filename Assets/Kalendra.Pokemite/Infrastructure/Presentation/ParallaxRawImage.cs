@@ -19,12 +19,8 @@ namespace Kalendra.Pokemite.Infrastructure.Presentation
         {
             image.uvRect = new Rect
             (
-                new Vector2
-                (
-                    speed.x * Time.deltaTime + image.uvRect.x,
-                    speed.y * Time.deltaTime + image.uvRect.y),
-                new Vector2(image.uvRect.width, image.uvRect.height
-                )
+                speed * Time.deltaTime + image.uvRect.position,
+                image.uvRect.size
             );
         }
     }
