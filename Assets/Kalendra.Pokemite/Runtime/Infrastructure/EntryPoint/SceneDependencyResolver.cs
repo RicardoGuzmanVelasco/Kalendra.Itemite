@@ -12,6 +12,7 @@ namespace Kalendra.Pokemite.Runtime.EntryPoint
 
             Container.Bind<CurrentSelectedController>().FromInstance(FindObjectOfType<CurrentSelectedController>());
             Container.Bind<CandidateSlotsController>().FromInstance(FindObjectOfType<CandidateSlotsController>());
+            Container.Bind<ResultController>().FromInstance(FindObjectOfType<ResultController>());
         }
     }
 }

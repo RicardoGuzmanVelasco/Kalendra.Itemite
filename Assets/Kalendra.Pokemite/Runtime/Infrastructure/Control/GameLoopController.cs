@@ -9,6 +9,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
     {
         [Inject] readonly CandidateSlotsController candidatesController;
         [Inject] readonly CurrentSelectedController currentController;
+        [Inject] readonly ResultController resultController;
 
         async void Start()
         {
@@ -27,10 +28,11 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
             Debug.Log("Round ready");
 
             Debug.Log("Choose!");
-            await candidatesController.WaitForSelection();
+            var selected = await candidatesController.WaitForSelection();
             Debug.Log("Choice ready");
 
-            await candidatesController.UpdateCurrentPkmnWithLastSelected();
+            resultController.ComputeNewChoice(selected);
+            currentController.UpdateCurrent(selected);
         }
 
         async Task SetFirstPokemon()

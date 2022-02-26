@@ -12,7 +12,6 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
         [SerializeField] GameObject candidateSlotsContainer;
 
         [Inject] readonly PokeApiClientAdapter repo;
-        [Inject] readonly CurrentSelectedController selectedController;
 
         IList<PkmnCard> cards;
         TaskCompletionSource<PkmnVisualDto> selectPokemonAwaiter;
@@ -33,7 +32,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
             card.Inject(pkmn);
         }
 
-        public async Task WaitForSelection()
+        public async Task<PkmnVisualDto> WaitForSelection()
         {
             foreach(var card in cards)
                 card.Selected += CardSelected;
@@ -43,14 +42,8 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
 
             foreach(var card in cards)
                 card.Selected -= CardSelected;
-        }
 
-        public async Task UpdateCurrentPkmnWithLastSelected()
-        {
-            var selectedPkmn = selectPokemonAwaiter.Task.Result;
-            selectedController.UpdateCurrent(selectedPkmn);
-
-            await Task.CompletedTask;
+            return selectPokemonAwaiter.Task.Result;
         }
 
         void CardSelected(PkmnVisualDto pkmn)
