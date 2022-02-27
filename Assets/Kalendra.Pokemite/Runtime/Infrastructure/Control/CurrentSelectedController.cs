@@ -3,6 +3,7 @@ using Kalendra.Pokemite.Runtime.Domain;
 using Kalendra.Pokemite.Runtime.Infrastructure.Presentation;
 using PokeApiNet;
 using UnityEngine;
+using Zenject;
 
 namespace Kalendra.Pokemite.Runtime.Infrastructure
 {
@@ -10,7 +11,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
     {
         [SerializeField] PkmnCard card;
 
-        readonly PokeApiClientAdapter repo = new PokeApiClientAdapter();
+        [Inject] readonly IPkmnVisualRepo repo;
 
         public Pokemon Pkmn => card.Pkmn;
 

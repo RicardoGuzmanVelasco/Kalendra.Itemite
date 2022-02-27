@@ -9,7 +9,7 @@ namespace Kalendra.Pokemite.Runtime.EntryPoint
     {
         public override void InstallBindings()
         {
-            ByInterfacesAndSelfTo<PokeApiClientAdapter>().AsSingle();
+            ByInterfacesAndSelfTo<PokeApiClientRepoAdapter>().AsSingle();
 
             ByFindingSingleInScene<CurrentSelectedController>();
             ByFindingSingleInScene<CandidateSlotsController>();

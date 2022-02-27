@@ -13,7 +13,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
         [SerializeField] GameObject candidateSlotsContainer;
         [SerializeField] AudioClip selectedClip;
         [Inject] readonly AudioSource audioPlayer;
-        [Inject] readonly PokeApiClientAdapter repo;
+        [Inject] readonly IPkmnVisualRepo repo;
 
         TaskCompletionSource<PkmnVisualDto> selectPokemonAwaiter;
 
@@ -79,7 +79,6 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
 
         public Task FreeCards()
         {
-            // var tasks = Cards.Select(card => card.Discard());
             foreach(var card in Cards)
                 card.Discard();
             return Task.CompletedTask;

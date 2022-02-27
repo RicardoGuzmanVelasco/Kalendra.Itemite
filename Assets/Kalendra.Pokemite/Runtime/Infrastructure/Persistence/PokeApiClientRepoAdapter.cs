@@ -1,5 +1,6 @@
 using System.Net.Http;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Kalendra.Pokemite.Runtime.Domain;
 using PokeApiNet;
 using UnityEngine;
@@ -8,7 +9,8 @@ using Random = System.Random;
 
 namespace Kalendra.Pokemite.Runtime.Infrastructure
 {
-    public class PokeApiClientAdapter : IPkmnRepo, IPkmnVisualRepo
+    [UsedImplicitly]
+    public class PokeApiClientRepoAdapter : IPkmnRepo, IPkmnVisualRepo
     {
         const int PokemonCount = 887;
 
