@@ -42,18 +42,12 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
         {
             var id = random.Next(1, PokemonCount + 1);
 
-            Debug.Log("Cache has " + id + ": " + cache.ContainsKey(id));
-
             if(cache.ContainsKey(id))
                 return cache[id];
 
-            Debug.Log("Fetching " + id);
             var fetched = await FetchVisualPkmn(id);
-            Debug.Log("Fetched " + fetched.Pkmn.Name);
 
             cache[id] = fetched;
-
-            Debug.Log("Now cache has " + id + ": " + cache.ContainsKey(id));
 
             return fetched;
         }
