@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -7,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace PokeApiNet
 {
@@ -19,15 +19,16 @@ namespace PokeApiNet
         /// The default `User-Agent` header value used by instances of <see cref="PokeApiClient"/>.
         /// </summary>
         public static readonly ProductHeaderValue DefaultUserAgent = GetDefaultUserAgent();
-        private readonly HttpClient _client;
+
         private readonly Uri _baseUri = new Uri("https://pokeapi.co/api/v2/");
-        private readonly IResourceCache _resourceCache = new DummyEmptyResourceCacheManager();
+        private readonly HttpClient _client;
+        private readonly IResourceCache _resourceCache = new DictionaryCacheManager();
         private readonly IResourceListCache _resourceListCache = new DummyEmptyResourceListCacheManager();
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        public PokeApiClient() : this(DefaultUserAgent) {}
+        public PokeApiClient() : this(DefaultUserAgent) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PokeApiClient"/> with 
@@ -36,7 +37,7 @@ namespace PokeApiNet
         /// <param name="userAgent">The value for the default `User-Agent` header.</param>
         public PokeApiClient(ProductHeaderValue userAgent)
         {
-            if (userAgent == null)
+            if(userAgent == null)
             {
                 throw new ArgumentNullException(nameof(userAgent));
             }
@@ -50,8 +51,7 @@ namespace PokeApiNet
         /// </summary>
         /// <param name="messageHandler">Message handler implementation</param>
         public PokeApiClient(HttpMessageHandler messageHandler)
-            : this(messageHandler, DefaultUserAgent)
-        {  }
+            : this(messageHandler, DefaultUserAgent) { }
 
         /// <summary>
         /// Constructor with message handler and `User-Agent` header value
@@ -60,7 +60,7 @@ namespace PokeApiNet
         /// <param name="userAgent">The value for the default `User-Agent` header.</param>
         public PokeApiClient(HttpMessageHandler messageHandler, ProductHeaderValue userAgent)
         {
-            if (userAgent == null)
+            if(userAgent == null)
             {
                 throw new ArgumentNullException(nameof(userAgent));
             }
@@ -131,14 +131,14 @@ namespace PokeApiNet
             string trimmedUrl = url.TrimEnd('/');
             string resourceId = trimmedUrl.Substring(trimmedUrl.LastIndexOf('/') + 1);
 
-            if (!int.TryParse(resourceId, out int id))
+            if(!int.TryParse(resourceId, out int id))
             {
                 // not sure what to do here...
                 throw new NotSupportedException($"Navigation url '{url}' is in an unexpected format");
             }
 
             T resource = _resourceCache.Get<T>(id);
-            if (resource == null)
+            if(resource == null)
             {
                 resource = await GetResourcesWithParamsAsync<T>(resourceId, cancellationToken);
                 _resourceCache.Store<T>(resource);
@@ -169,7 +169,7 @@ namespace PokeApiNet
             where T : NamedApiResource
         {
             T resource = _resourceCache.Get<T>(id);
-            if (resource == null)
+            if(resource == null)
             {
                 resource = await GetResourcesWithParamsAsync<T>(id.ToString(), cancellationToken);
                 _resourceCache.Store(resource);
@@ -203,14 +203,14 @@ namespace PokeApiNet
             where T : NamedApiResource
         {
             string sanitizedName = name
-                .Replace(" ", "-")      // no resource can have a space in the name; API uses -'s in their place
-                .Replace("'", "")       // looking at you, Farfetch'd
-                .Replace(".", "");      // looking at you, Mime Jr. and Mr. Mime
+                .Replace(" ", "-") // no resource can have a space in the name; API uses -'s in their place
+                .Replace("'", "") // looking at you, Farfetch'd
+                .Replace(".", ""); // looking at you, Mime Jr. and Mr. Mime
 
             // Nidoran is interesting as the API wants 'nidoran-f' or 'nidoran-m'
 
             T resource = _resourceCache.Get<T>(sanitizedName);
-            if (resource == null)
+            if(resource == null)
             {
                 resource = await GetResourcesWithParamsAsync<T>(sanitizedName, cancellationToken);
                 _resourceCache.Store(resource);
@@ -238,7 +238,8 @@ namespace PokeApiNet
         /// <param name="collection">The collection of navigation objects</param>
         /// <param name="cancellationToken">Cancellation token for the request; not utilitized if data has been cached</param>
         /// <returns>A list of resolved objects</returns>
-        public async Task<List<T>> GetResourceAsync<T>(IEnumerable<UrlNavigation<T>> collection, CancellationToken cancellationToken)
+        public async Task<List<T>> GetResourceAsync<T>(IEnumerable<UrlNavigation<T>> collection,
+            CancellationToken cancellationToken)
             where T : NamedApiResource
         {
             return (await Task.WhenAll(collection.Select(m => GetResourceAsync(m, cancellationToken)))).ToList();
@@ -335,18 +336,21 @@ namespace PokeApiNet
         /// <param name="offset">Page offset</param>
         /// <param name="cancellationToken">Cancellation token for the request; not utilitized if data has been cached</param>
         /// <returns>The paged resource object</returns>
-        public Task<NamedApiResourceList<T>> GetNamedResourcePageAsync<T>(int limit, int offset, CancellationToken cancellationToken = default)
+        public Task<NamedApiResourceList<T>> GetNamedResourcePageAsync<T>(int limit, int offset,
+            CancellationToken cancellationToken = default)
             where T : NamedApiResource
         {
             string url = GetApiEndpointString<T>();
-            return InternalGetNamedResourcePageAsync<T>(AddPaginationParamsToUrl(url, limit, offset), cancellationToken);
+            return InternalGetNamedResourcePageAsync<T>(AddPaginationParamsToUrl(url, limit, offset),
+                cancellationToken);
         }
 
-        private async Task<NamedApiResourceList<T>> InternalGetNamedResourcePageAsync<T>(string url, CancellationToken cancellationToken)
+        private async Task<NamedApiResourceList<T>> InternalGetNamedResourcePageAsync<T>(string url,
+            CancellationToken cancellationToken)
             where T : NamedApiResource
         {
             var resources = _resourceListCache.GetNamedResourceList<T>(url);
-            if (resources == null)
+            if(resources == null)
             {
                 resources = await GetAsync<NamedApiResourceList<T>>(url, cancellationToken);
                 _resourceListCache.Store(url, resources);
@@ -376,18 +380,20 @@ namespace PokeApiNet
         /// <param name="offset">Page offset</param>
         /// <param name="cancellationToken">Cancellation token for the request; not utilitized if data has been cached</param>
         /// <returns>The paged resource object</returns>
-        public Task<ApiResourceList<T>> GetApiResourcePageAsync<T>(int limit, int offset, CancellationToken cancellationToken = default)
+        public Task<ApiResourceList<T>> GetApiResourcePageAsync<T>(int limit, int offset,
+            CancellationToken cancellationToken = default)
             where T : ApiResource
         {
             string url = GetApiEndpointString<T>();
             return InternalGetApiResourcePageAsync<T>(AddPaginationParamsToUrl(url, limit, offset), cancellationToken);
         }
 
-        private async Task<ApiResourceList<T>> InternalGetApiResourcePageAsync<T>(string url, CancellationToken cancellationToken)
+        private async Task<ApiResourceList<T>> InternalGetApiResourcePageAsync<T>(string url,
+            CancellationToken cancellationToken)
             where T : ApiResource
         {
             var resources = _resourceListCache.GetApiResourceList<T>(url);
-            if (resources == null)
+            if(resources == null)
             {
                 resources = await GetAsync<ApiResourceList<T>>(url, cancellationToken);
                 _resourceListCache.Store(url, resources);
@@ -402,7 +408,8 @@ namespace PokeApiNet
         private async Task<T> GetAsync<T>(string url, CancellationToken cancellationToken)
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, url);
-            using var response = await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            using var response =
+                await _client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
             response.EnsureSuccessStatusCode();
             return DeserializeStream<T>(await response.Content.ReadAsStreamAsync());
@@ -425,12 +432,12 @@ namespace PokeApiNet
 
             // TODO consider to always set the limit parameter when not present to the default "20"
             // in order to have a single cached resource list for requests with explicit or implicit default limit
-            if (limit.HasValue)
+            if(limit.HasValue)
             {
                 queryParameters.Add(nameof(limit), limit.Value.ToString());
             }
-            
-            if (offset.HasValue)
+
+            if(offset.HasValue)
             {
                 queryParameters.Add(nameof(offset), offset.Value.ToString());
             }
@@ -440,7 +447,8 @@ namespace PokeApiNet
 
         private static string GetApiEndpointString<T>()
         {
-            PropertyInfo propertyInfo = typeof(T).GetProperty("ApiEndpoint", BindingFlags.Static | BindingFlags.NonPublic);
+            PropertyInfo propertyInfo =
+                typeof(T).GetProperty("ApiEndpoint", BindingFlags.Static | BindingFlags.NonPublic);
             return propertyInfo.GetValue(null).ToString();
         }
     }
@@ -478,18 +486,40 @@ namespace PokeApiNet
         T Get<T>(int id) where T : ResourceBase;
     }
 
-    internal class DummyEmptyResourceCacheManager : IResourceCache
+    internal sealed class DictionaryCacheManager : IResourceCache
     {
-        public void Dispose() { }
+        static readonly Dictionary<string, NamedApiResource> NamedCache = new Dictionary<string, NamedApiResource>();
 
-        public void Clear<T>() where T : ResourceBase { }
+        public void Dispose()
+        {
+            ClearAll();
+        }
 
-        public void ClearAll() { }
+        public void Clear<T>() where T : ResourceBase
+        {
+            foreach(var (key, value) in NamedCache)
+                if(value is T)
+                    NamedCache.Remove(key);
+        }
 
-        public void Store<T>(T resource) where T : NamedApiResource { }
+        public void ClearAll()
+        {
+            NamedCache.Clear();
+        }
 
-        public T Get<T>(string name) where T : NamedApiResource => null;
+        public void Store<T>(T resource) where T : NamedApiResource
+        {
+            NamedCache[resource.Name] = resource;
+        }
 
-        public T Get<T>(int id) where T : ResourceBase => null;
+        public T Get<T>(string name) where T : NamedApiResource
+        {
+            return NamedCache.ContainsKey(name) ? NamedCache[name] as T : null;
+        }
+
+        public T Get<T>(int id) where T : ResourceBase
+        {
+            return null;
+        }
     }
 }
