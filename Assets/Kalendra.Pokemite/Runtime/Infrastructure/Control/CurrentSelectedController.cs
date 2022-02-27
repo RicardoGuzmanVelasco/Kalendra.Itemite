@@ -16,7 +16,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
 
         public async Task RandomizeFirst()
         {
-            UpdateCurrent(await repo.GetRandomVisualPkmn());
+            await UpdateCurrent(await repo.GetRandomVisualPkmn());
         }
 
         public Task UpdateCurrent(PkmnVisualDto dto)

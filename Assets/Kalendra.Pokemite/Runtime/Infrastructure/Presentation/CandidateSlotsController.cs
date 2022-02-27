@@ -76,5 +76,13 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
                     .RelateWith(
                         new RelatablePkmn(cardPkmn));
         }
+
+        public Task FreeCards()
+        {
+            // var tasks = Cards.Select(card => card.Discard());
+            foreach(var card in Cards)
+                card.Discard();
+            return Task.CompletedTask;
+        }
     }
 }

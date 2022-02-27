@@ -35,25 +35,11 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
 
         public event Action<PkmnVisualDto> Selected = _ => { };
 
-        void Hide()
-        {
-            if(IsHidden)
-                return;
-
-            originalAlpha = canvasGroup.alpha;
-            canvasGroup.alpha = 0;
-        }
-
         public void Inject(PkmnVisualDto dto)
         {
-            Inject(dto.Pkmn, dto.Sprite);
-        }
-
-        void Inject(Pokemon pkmn, Sprite pkmnSprite)
-        {
-            Pkmn = pkmn;
-            label.Text = pkmn.Name;
-            picture.sprite = pkmnSprite;
+            Pkmn = dto.Pkmn;
+            label.Text = dto.Pkmn.Name;
+            picture.sprite = dto.Sprite;
 
             if(IsHidden)
                 ShowAnimation();
@@ -68,6 +54,26 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
                 originalAlpha,
                 .25f
             );
+        }
+
+        public void Discard()
+        {
+            DOTween.To
+            (
+                () => canvasGroup.alpha,
+                value => canvasGroup.alpha = value,
+                0,
+                .25f
+            );
+        }
+
+        void Hide()
+        {
+            if(IsHidden)
+                return;
+
+            originalAlpha = canvasGroup.alpha;
+            canvasGroup.alpha = 0;
         }
 
         public void OnClick()

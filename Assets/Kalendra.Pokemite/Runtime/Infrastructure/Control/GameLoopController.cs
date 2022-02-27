@@ -24,6 +24,8 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
 
         async Task PlayRound()
         {
+            await UpdateRoundCounter();
+
             await candidates.RandomizeRound();
 
             var selected = await candidates.WaitForSelection();
@@ -31,6 +33,14 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
             await candidates.ShowCardScores(current.Pkmn);
             await score.UpdateScore(ChoiceFrom(selected));
             await current.UpdateCurrent(selected);
+
+            await candidates.FreeCards();
+        }
+
+        Task UpdateRoundCounter()
+        {
+            Debug.Log("New Round!");
+            return Task.Delay(1000);
         }
 
         #region Support methods
