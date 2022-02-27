@@ -4,6 +4,7 @@ using Kalendra.Pokemite.Runtime.Domain;
 using Kalendra.Pokemite.Runtime.Infrastructure.Presentation;
 using PokeApiNet;
 using UnityEngine;
+using Zenject;
 
 namespace Kalendra.Pokemite.Runtime.Infrastructure
 {
@@ -11,10 +12,19 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
     {
         [SerializeField] PkmnCard currentPkmnCard;
         [SerializeField] OutlinedLabel resultLabel;
+        [SerializeField] ChoiceAudioClips choiceClips;
 
         float accResult;
 
-        public void UpdateScore(PkmnVisualDto choice)
+        [Inject] AudioSource audioPlayer;
+
+        public void UpdateScore(Choice choice)
+        {
+            UpdateScore(choice.Pkmn);
+            PlayChoiceAudio(choice.IsBest);
+        }
+
+        void UpdateScore(PkmnVisualDto choice)
         {
             var points = Relate(currentPkmnCard.Pkmn, choice.Pkmn);
 
@@ -61,6 +71,11 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
                     resultLabel.transform.DOShakeRotation(1.5f);
                     break;
             }
+        }
+
+        void PlayChoiceAudio(bool wasGoodChoice)
+        {
+            audioPlayer.PlayOneShot(choiceClips.ByResult(wasGoodChoice));
         }
         #endregion
     }

@@ -11,20 +11,22 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
     public class CandidateSlotsController : MonoBehaviour
     {
         [SerializeField] GameObject candidateSlotsContainer;
+        [SerializeField] AudioClip selectedClip;
+        [Inject] readonly AudioSource audioPlayer;
         [Inject] readonly PokeApiClientAdapter repo;
-
-        IEnumerable<PkmnCard> cards;
 
         TaskCompletionSource<PkmnVisualDto> selectPokemonAwaiter;
 
+        public IEnumerable<PkmnCard> Cards { get; private set; }
+
         void Awake()
         {
-            cards = candidateSlotsContainer.GetComponentsInChildren<PkmnCard>();
+            Cards = candidateSlotsContainer.GetComponentsInChildren<PkmnCard>();
         }
 
         public async Task RandomizeRound()
         {
-            await Task.WhenAll(cards.Select(RandomizeCard));
+            await Task.WhenAll(Cards.Select(RandomizeCard));
         }
 
         async Task RandomizeCard(PkmnCard card)
@@ -35,13 +37,13 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
 
         public async Task<PkmnVisualDto> WaitForSelection()
         {
-            foreach(var card in cards)
+            foreach(var card in Cards)
                 card.Selected += CardSelected;
 
             selectPokemonAwaiter = new TaskCompletionSource<PkmnVisualDto>();
             await selectPokemonAwaiter.Task;
 
-            foreach(var card in cards)
+            foreach(var card in Cards)
                 card.Selected -= CardSelected;
 
             return selectPokemonAwaiter.Task.Result;
@@ -49,16 +51,17 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure.Presentation
 
         void CardSelected(PkmnVisualDto pkmn)
         {
+            audioPlayer.PlayOneShot(selectedClip);
             selectPokemonAwaiter.SetResult(pkmn);
         }
 
         public async Task ShowCardScores(Pokemon currentPkmn)
         {
-            var relations = cards.Select(card => Relate(currentPkmn, card.Pkmn)).ToList();
+            var relations = Cards.Select(card => Relate(currentPkmn, card.Pkmn)).ToList();
 
             await Task.WhenAll
             (
-                cards.Select
+                Cards.Select
                 ((card, i) =>
                     card.GetComponentInParent<PkmnCandidateSlot>()
                         .AnimateResult((int)relations[i], relations[i] >= relations.Max())

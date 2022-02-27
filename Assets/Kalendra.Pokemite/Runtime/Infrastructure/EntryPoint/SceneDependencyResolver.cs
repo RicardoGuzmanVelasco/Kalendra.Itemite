@@ -1,5 +1,6 @@
 using Kalendra.Pokemite.Runtime.Infrastructure;
 using Kalendra.Pokemite.Runtime.Infrastructure.Presentation;
+using UnityEngine;
 using Zenject;
 
 namespace Kalendra.Pokemite.Runtime.EntryPoint
@@ -8,11 +9,25 @@ namespace Kalendra.Pokemite.Runtime.EntryPoint
     {
         public override void InstallBindings()
         {
-            Container.BindInterfacesAndSelfTo<PokeApiClientAdapter>().AsSingle();
+            ByInterfacesAndSelfTo<PokeApiClientAdapter>().AsSingle();
 
-            Container.Bind<CurrentSelectedController>().FromInstance(FindObjectOfType<CurrentSelectedController>());
-            Container.Bind<CandidateSlotsController>().FromInstance(FindObjectOfType<CandidateSlotsController>());
-            Container.Bind<ResultController>().FromInstance(FindObjectOfType<ResultController>());
+            ByFindingSingleInScene<CurrentSelectedController>();
+            ByFindingSingleInScene<CandidateSlotsController>();
+            ByFindingSingleInScene<ResultController>();
+
+            ByComponentInScene<AudioSource>();
         }
+
+        FromBinderNonGeneric ByInterfacesAndSelfTo<T>()
+        {
+            return Container.BindInterfacesAndSelfTo<T>();
+        }
+
+        void ByFindingSingleInScene<T>() where T : Object
+        {
+            Container.Bind<T>().FromInstance(FindObjectOfType<T>());
+        }
+
+        void ByComponentInScene<T>() { }
     }
 }
