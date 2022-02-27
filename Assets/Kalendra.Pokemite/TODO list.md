@@ -4,9 +4,10 @@
 - [ ] Add!!!: domain Relating is done by relationPolicy: p1.RelateWith(p2) --> strategy.Relate(p1, p2)
 - [ ] Refactor: logic in controllers id done by domain: Choice, Result, etc.
 
-- [ ] Add: fake repo with cached pkmns
+- [-] Add: fake repo with cached pkmns
 - [x] Add: repo cache!!!
 - [x] Refactor: visual repo gets pararelly sprite and pkmn info
+- [ ] Add: url fallbacks in case first one has not the requested pkmn
 
 - [ ] Add: repo get by constructor a range of Id where to randomize from
 - [ ] Refactor: IController

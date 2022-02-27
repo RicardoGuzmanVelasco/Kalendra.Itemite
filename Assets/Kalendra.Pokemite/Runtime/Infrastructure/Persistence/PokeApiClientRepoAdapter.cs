@@ -40,14 +40,25 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
         #region Visual
         public async Task<PkmnVisualDto> GetRandomVisualPkmn()
         {
-            var id = random.Next(1, PokemonCount + 1);
+            PkmnVisualDto fetched = null;
+            do
+            {
+                var id = random.Next(1, PokemonCount + 1);
 
-            if(cache.ContainsKey(id))
-                return cache[id];
+                if(cache.ContainsKey(id) && cache[id] is not null)
+                    return cache[id];
 
-            var fetched = await FetchVisualPkmn(id);
+                try
+                {
+                    fetched = await FetchVisualPkmn(id);
+                }
+                catch(HttpRequestException e)
+                {
+                    Debug.LogException(e);
+                }
 
-            cache[id] = fetched;
+                cache[id] = fetched;
+            } while(fetched?.Sprite is null);
 
             return fetched;
         }
