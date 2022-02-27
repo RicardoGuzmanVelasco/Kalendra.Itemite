@@ -5,8 +5,8 @@
 - [ ] Refactor: logic in controllers id done by domain: Choice, Result, etc.
 
 - [ ] Add: fake repo with cached pkmns
-- [.] Add: repo cache!!!
-- [ ] Refactor: visual repo gets pararelly sprite and pkmn info
+- [x] Add: repo cache!!!
+- [x] Refactor: visual repo gets pararelly sprite and pkmn info
 
 - [ ] Add: repo get by constructor a range of Id where to randomize from
 - [ ] Refactor: IController
