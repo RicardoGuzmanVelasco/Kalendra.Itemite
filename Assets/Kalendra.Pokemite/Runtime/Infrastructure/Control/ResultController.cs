@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using DG.Tweening;
 using Kalendra.Itemite.Runtime.Infrastructure;
 using Kalendra.Pokemite.Runtime.Domain;
@@ -18,10 +19,12 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
 
         [Inject] AudioSource audioPlayer;
 
-        public void UpdateScore(Choice choice)
+        public async Task UpdateScore(Choice choice)
         {
             UpdateScore(choice.Pkmn);
             PlayChoiceAudio(choice.IsBest);
+
+            await Task.Delay(1000);
         }
 
         void UpdateScore(PkmnVisualDto choice)

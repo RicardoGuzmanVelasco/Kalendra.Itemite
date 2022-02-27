@@ -58,7 +58,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
                 await Task.Delay(16);
 
             if(request.error != null)
-                throw new HttpRequestException(request.error);
+                throw new HttpRequestException($"Cannot request for Pkmn of id {id}: {request.error}");
 
             var texture = DownloadHandlerTexture.GetContent(request);
 

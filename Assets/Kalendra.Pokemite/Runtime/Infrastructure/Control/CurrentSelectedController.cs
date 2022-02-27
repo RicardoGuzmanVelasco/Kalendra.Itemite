@@ -12,16 +12,17 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
 
         readonly PokeApiClientAdapter repo = new PokeApiClientAdapter();
 
-        public Pokemon CurrentPkmn => card.Pkmn;
+        public Pokemon Pkmn => card.Pkmn;
 
         public async Task RandomizeFirst()
         {
             UpdateCurrent(await repo.GetRandomVisualPkmn());
         }
 
-        public void UpdateCurrent(PkmnVisualDto dto)
+        public Task UpdateCurrent(PkmnVisualDto dto)
         {
             card.Inject(dto);
+            return Task.CompletedTask;
         }
     }
 }

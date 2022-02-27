@@ -10,37 +10,35 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
 {
     public class GameLoopController : MonoBehaviour
     {
-        [Inject] readonly AudioSource audioPlayer;
-        [Inject] readonly CandidateSlotsController candidatesController;
-        [Inject] readonly CurrentSelectedController currentController;
-        [Inject] readonly ResultController resultController;
+        [Inject] readonly CandidateSlotsController candidates;
+        [Inject] readonly CurrentSelectedController current;
+        [Inject] readonly ResultController score;
 
         async void Start()
         {
             await SetFirstPokemon();
 
-            do
-            {
-                await PlayRound();
-            } while(true);
+            do await PlayRound();
+            while(true);
         }
 
         async Task PlayRound()
         {
-            await candidatesController.RandomizeRound();
+            await candidates.RandomizeRound();
 
-            var selected = await candidatesController.WaitForSelection();
+            var selected = await candidates.WaitForSelection();
 
-            await candidatesController.ShowCardScores(currentController.CurrentPkmn);
-            resultController.UpdateScore(ChoiceFrom(selected));
-            currentController.UpdateCurrent(selected);
+            await candidates.ShowCardScores(current.Pkmn);
+            await score.UpdateScore(ChoiceFrom(selected));
+            await current.UpdateCurrent(selected);
         }
 
+        #region Support methods
         Choice ChoiceFrom(PkmnVisualDto selected)
         {
-            var current = currentController.CurrentPkmn;
+            var current = this.current.Pkmn;
             var selectedCandidate = selected.Pkmn;
-            var allCandidates = candidatesController.Cards.Select(c => c.Pkmn);
+            var allCandidates = candidates.Cards.Select(c => c.Pkmn);
 
             var wasGoodChoice = Relate(current, selectedCandidate) >= allCandidates.Max(p => Relate(current, p));
 
@@ -59,10 +57,9 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
                         new RelatablePkmn(with));
         }
 
-        #region SettingUp
         async Task SetFirstPokemon()
         {
-            await currentController.RandomizeFirst();
+            await current.RandomizeFirst();
         }
         #endregion
     }

@@ -5,10 +5,10 @@
 - [ ] Refactor: logic in controllers id done by domain: Choice, Result, etc.
 
 - [ ] Add: fake repo with cached pkmns
+- [.] Add: repo cache!!!
 
 - [ ] Add: repo get by constructor a range of Id where to randomize from
 - [ ] Refactor: IController
 - [ ] Refactor: PkmnCard alpha control to view component "fadeable canvas group" or whatnot
-- [ ] Add: repo cache!!!
 - [ ] Add: Show/Hide slots panel when ContinueWithInMainThread it's available
   - SetActive() does not work when on threading...
