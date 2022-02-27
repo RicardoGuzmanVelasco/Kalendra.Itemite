@@ -6,6 +6,7 @@
 
 - [ ] Add: fake repo with cached pkmns
 - [.] Add: repo cache!!!
+- [ ] Refactor: visual repo gets pararelly sprite and pkmn info
 
 - [ ] Add: repo get by constructor a range of Id where to randomize from
 - [ ] Refactor: IController

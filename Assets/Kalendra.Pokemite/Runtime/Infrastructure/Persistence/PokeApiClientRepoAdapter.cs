@@ -37,17 +37,19 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
         {
             var id = random.Next(1, PokemonCount + 1);
 
-            Pokemon pkmn;
-            pkmn = await GetPkmn(id);
+            Pokemon pkmn = null;
+            Sprite sprite = null;
 
-            Sprite sprite;
-            sprite = await GetSpriteOfPkmnById(id);
+            await Task.WhenAll(FetchPkmn(), FetchSprite());
 
             return new PkmnVisualDto
             {
                 Pkmn = pkmn,
                 Sprite = sprite
             };
+
+            async Task FetchPkmn() => pkmn = await GetPkmn(id);
+            async Task FetchSprite() => sprite = await GetSpriteOfPkmnById(id);
         }
 
         public async Task<Sprite> GetSpriteOfPkmnById(int id)
