@@ -13,17 +13,17 @@ namespace Kalendra.Pokemite.Tests
         {
             var sut = new ByTypeRelation();
 
-            var result = sut.Relate(await For("bulbasaur"), await For("charmander"));
+            var result = sut.Relate(await Bulbasaur, await Squirtle);
 
             result.Should().Be(0);
         }
 
         [Test]
-        public async Task JustOneType_WhenIsCommon_IsPositive()
+        public async Task JustMonotype_ButCommon_IsPositive()
         {
             var sut = new ByTypeRelation();
 
-            var result = sut.Relate(await For("bulbasaur"), await For("chikorita"));
+            var result = sut.Relate(await Squirtle, await Wartortle);
 
             result.Should().BePositive();
         }
@@ -33,9 +33,9 @@ namespace Kalendra.Pokemite.Tests
         {
             var sut = new ByTypeRelation();
 
-            var result = sut.Relate(await For("amaura"), await For("aurorus"));
+            var result = sut.Relate(await Amaura, await Aurorus);
 
-            result.Should().BeGreaterThan(sut.Relate(await For("bulbasaur"), await For("chikorita")));
+            result.Should().BeGreaterThan(sut.Relate(await Squirtle, await Wartortle));
         }
 
         [Test]
@@ -43,9 +43,19 @@ namespace Kalendra.Pokemite.Tests
         {
             var sut = new ByTypeRelation();
 
-            var result = sut.Relate(await For("amaura"), await For("aurorus"));
+            var result = sut.Relate(await Amaura, await Aurorus);
 
-            result.Should().BeGreaterThan(sut.Relate(await For("amaura"), await For("graveler")));
+            result.Should().BeGreaterThan(sut.Relate(await Amaura, await Graveler));
+        }
+
+        [Test]
+        public async Task JustOneTypeButCommon_IsBetterThan_DualTypeButOneCommon()
+        {
+            var sut = new ByTypeRelation();
+
+            var result = sut.Relate(await Squirtle, await Wartortle);
+
+            result.Should().BeGreaterThan(sut.Relate(await Amaura, await Graveler));
         }
     }
 }

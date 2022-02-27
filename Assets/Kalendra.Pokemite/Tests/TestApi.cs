@@ -9,7 +9,14 @@ namespace Kalendra.Pokemite.Tests
     {
         static readonly IPkmnRepo Repo = new PokeApiClientRepoAdapter();
 
-        public static async Task<Pokemon> For(string name)
+        public static Task<Pokemon> Bulbasaur => AskFor("bulbasaur");
+        public static Task<Pokemon> Squirtle => AskFor("squirtle");
+        public static Task<Pokemon> Wartortle => AskFor("wartortle");
+        public static Task<Pokemon> Amaura => AskFor("amaura");
+        public static Task<Pokemon> Aurorus => AskFor("aurorus");
+        public static Task<Pokemon> Graveler => AskFor("graveler");
+
+        internal static async Task<Pokemon> AskFor(string name)
         {
             return await Repo.GetPkmn(name);
         }
