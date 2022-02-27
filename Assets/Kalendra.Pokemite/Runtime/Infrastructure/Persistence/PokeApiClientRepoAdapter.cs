@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -14,9 +15,12 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
     {
         const int PokemonCount = 887;
 
+        readonly Dictionary<int, PkmnVisualDto> cache = new Dictionary<int, PkmnVisualDto>();
+
         readonly PokeApiClient client = new PokeApiClient();
         readonly Random random = new Random();
 
+        #region Data
         public async Task<Pokemon> GetRandomPkmn()
         {
             return await GetPkmn(random.Next(1, PokemonCount + 1));
@@ -31,12 +35,31 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
         {
             return await client.GetResourceAsync<Pokemon>(id);
         }
+        #endregion
 
         #region Visual
         public async Task<PkmnVisualDto> GetRandomVisualPkmn()
         {
             var id = random.Next(1, PokemonCount + 1);
 
+            Debug.Log("Cache has " + id + ": " + cache.ContainsKey(id));
+
+            if(cache.ContainsKey(id))
+                return cache[id];
+
+            Debug.Log("Fetching " + id);
+            var fetched = await FetchVisualPkmn(id);
+            Debug.Log("Fetched " + fetched.Pkmn.Name);
+
+            cache[id] = fetched;
+
+            Debug.Log("Now cache has " + id + ": " + cache.ContainsKey(id));
+
+            return fetched;
+        }
+
+        async Task<PkmnVisualDto> FetchVisualPkmn(int id)
+        {
             Pokemon pkmn = null;
             Sprite sprite = null;
 
@@ -52,7 +75,7 @@ namespace Kalendra.Pokemite.Runtime.Infrastructure
             async Task FetchSprite() => sprite = await GetSpriteOfPkmnById(id);
         }
 
-        public async Task<Sprite> GetSpriteOfPkmnById(int id)
+        static async Task<Sprite> GetSpriteOfPkmnById(int id)
         {
             using var request = UnityWebRequestTexture.GetTexture(Url(id));
 
