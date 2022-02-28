@@ -33,7 +33,7 @@ namespace Kalendra.Pokemite.Tests
         {
             var sut = new ByTypeRelation();
 
-            var result = sut.Relate(await Amaura, await Aurorus);
+            var result = sut.Relate(await Bulbasaur, await Venusaur);
 
             result.Should().BeGreaterThan(sut.Relate(await Squirtle, await Wartortle));
         }
@@ -43,9 +43,9 @@ namespace Kalendra.Pokemite.Tests
         {
             var sut = new ByTypeRelation();
 
-            var result = sut.Relate(await Amaura, await Aurorus);
+            var result = sut.Relate(await Bulbasaur, await Venusaur);
 
-            result.Should().BeGreaterThan(sut.Relate(await Amaura, await Graveler));
+            result.Should().BeGreaterThan(sut.Relate(await Bulbasaur, await Torterra));
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace Kalendra.Pokemite.Tests
 
             var result = sut.Relate(await Squirtle, await Wartortle);
 
-            result.Should().BeGreaterThan(sut.Relate(await Amaura, await Graveler));
+            result.Should().BeGreaterThan(sut.Relate(await Bulbasaur, await Torterra));
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace Kalendra.Pokemite.Tests
 
             var result = sut.Relate(await Bulbasaur, await Torterra);
 
-            result.Should().BeLessThan(sut.Relate(await Bulbasaur, await Sunflora));
+            result.Should().BeLessThan(sut.Relate(await Bulbasaur, await Chikorita));
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace Kalendra.Pokemite.Tests
         {
             var sut = new ByTypeRelation();
 
-            var result = sut.Relate(await Bulbasaur, await Sunflora);
+            var result = sut.Relate(await Bulbasaur, await Chikorita);
 
             result.Should().BeLessThan(sut.Relate(await Squirtle, await Wartortle));
         }
