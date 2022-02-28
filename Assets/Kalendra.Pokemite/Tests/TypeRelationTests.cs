@@ -57,5 +57,25 @@ namespace Kalendra.Pokemite.Tests
 
             result.Should().BeGreaterThan(sut.Relate(await Amaura, await Graveler));
         }
+
+        [Test]
+        public async Task BothDualType_ButJustOneCommon_IsWorseThan_TheSameButJustOneDualType()
+        {
+            var sut = new ByTypeRelation();
+
+            var result = sut.Relate(await Bulbasaur, await Torterra);
+
+            result.Should().BeLessThan(sut.Relate(await Bulbasaur, await Sunflora));
+        }
+
+        [Test]
+        public async Task JustOneDualType_AndJustOneCommon_IsWorseThan_NoDualTypeAndCommon()
+        {
+            var sut = new ByTypeRelation();
+
+            var result = sut.Relate(await Bulbasaur, await Sunflora);
+
+            result.Should().BeLessThan(sut.Relate(await Squirtle, await Wartortle));
+        }
     }
 }

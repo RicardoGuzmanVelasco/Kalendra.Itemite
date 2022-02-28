@@ -13,7 +13,7 @@ namespace Kalendra.Pokemite.Runtime.Domain
             var common = types1.Intersect(types2).Count();
             var unCommon = types1.Union(types2).Count() - common;
 
-            return (float)common / (unCommon > 0 ? unCommon : 1);
+            return common / (unCommon + 1f);
         }
     }
 }
